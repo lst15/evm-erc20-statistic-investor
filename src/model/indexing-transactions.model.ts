@@ -1,5 +1,7 @@
-import { EventLog } from "ethers";
+import { EventLog, Log } from "ethers";
 
+
+//TODO corrigir tipagem
 export class IndexingTransactionsModel {
-  readonly indexing?:EventLog[]
+  readonly indexing?:any
 }

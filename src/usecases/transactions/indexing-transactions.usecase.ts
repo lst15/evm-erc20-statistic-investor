@@ -10,8 +10,8 @@ interface IndexingTransactionsUseCaseRequest{
 class IndexingTransactionsUseCase {
   constructor(private web3Repository:Web3Interface){}
 
-  async exec({transactions_io}:IndexingTransactionsUseCaseRequest):Promise<IndexingTransactionsModel>{
-    const indexing: EventLog[] = []
+  exec({transactions_io}:IndexingTransactionsUseCaseRequest):any{
+    const indexing_transaction: any[] = []
 
     for(var i in transactions_io.contract_transactions?.contract_transactions_in){
       const index = parseInt(i);
@@ -20,9 +20,10 @@ class IndexingTransactionsUseCase {
       transactions_io.pair_transactions?.pair_transactions_in.forEach(transactionIn => {        
 
         if(transactionIn.transactionHash == transactionLog.transactionHash){
-          indexing.push(transactionIn)
+          indexing_transaction.push({...transactionIn,operation:"buy"})
+          indexing_transaction[0]
         }
-
+        
       });
     }
 
@@ -33,14 +34,14 @@ class IndexingTransactionsUseCase {
       transactions_io.pair_transactions?.pair_transactions_out.forEach(transactionOut => {        
 
         if(transactionOut.transactionHash == transactionLog.transactionHash){
-          indexing.push(transactionOut)
+          indexing_transaction.push({...transactionOut,operation:"sell"})  
         }
 
       });
     }
 
-    indexing.sort((a:any,b:any) => a.blockNumber - b.blockNumber)
-    return {indexing}
+    indexing_transaction.sort((a:any,b:any) => a.blockNumber - b.blockNumber)
+    return {indexing_transaction}
   }
 
 }
