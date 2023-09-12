@@ -2,7 +2,10 @@ import 'dotenv/config';
 import {z} from "zod";
 
 const envZodSchema = z.object({
-    RPC:z.string().nonempty()
+    RPC:z.string().nonempty(),
+    DIFF_BLOCKS:z.string(),
+    WETH:z.string(),
+    FACTORY:z.string()
 });
 
 const _env = envZodSchema.safeParse(process.env);
