@@ -1,4 +1,4 @@
-import { ethers } from "ethers"
+import { EventLog, ethers } from "ethers"
 import { FormatValueController } from "./controller/format-value.controller"
 import { MainContractsController } from "./controller/main-contracts.controller"
 import { TokenInfoController } from "./controller/token-info.controller"
@@ -14,5 +14,8 @@ import { IndexingTransactionsController } from "./controller/indexing-transactio
   const token_info = await TokenInfoController(main_contracts,token_address)
   const transactions_io = await TransactionsIOController(main_contracts,token_info.pair as string,user_address)
   const indexing = IndexingTransactionsController(transactions_io)
-  console.log(indexing)
+  
+  indexing.forEach(element => {
+    console.log(element.operation)
+  });
 })()
