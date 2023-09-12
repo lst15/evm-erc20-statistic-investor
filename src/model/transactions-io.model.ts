@@ -9,6 +9,6 @@ export class TransactionIOModel{
   
   readonly contract_transactions?:{
     readonly contract_transactions_in:EventLog[];
-    readonly contracT_transactions_out:EventLog[];
+    readonly contract_transactions_out:EventLog[];
   }
 }
