@@ -1,1 +1,4 @@
 RPC="https://mainnet.infura.io/v3/6a168940ef48465d9b5894c30d5d9ab7"
+DIFF_BLOCKS=10
+WETH="0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+FACTORY="0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f"
