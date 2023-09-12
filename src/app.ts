@@ -4,6 +4,8 @@ import { MainContractsController } from "./controller/main-contracts.controller"
 import { TokenInfoController } from "./controller/token-info.controller"
 import { TransactionsIOController } from "./controller/transactions-io.controller"
 import { IndexingTransactionsController } from "./controller/indexing-transactions.controller"
+import { IndexingTransactionsModel } from "./model/indexing-transactions.model"
+import { AgroupingTransactionsIOController } from "./controller/agrouping-transactions-io.controller"
 
 (async () => {
   
@@ -13,9 +15,7 @@ import { IndexingTransactionsController } from "./controller/indexing-transactio
   const main_contracts = MainContractsController(token_address)
   const token_info = await TokenInfoController(main_contracts,token_address)
   const transactions_io = await TransactionsIOController(main_contracts,token_info.pair as string,user_address)
-  const indexing = IndexingTransactionsController(transactions_io)
+  const indexing = IndexingTransactionsController(transactions_io) 
+  const agrouping = AgroupingTransactionsIOController(indexing)
   
-  indexing.forEach(element => {
-    console.log(element.operation)
-  });
 })()
