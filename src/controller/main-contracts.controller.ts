@@ -1,8 +1,8 @@
 import { MainContractsFactory } from "../factory/main-contracts.factory"
 
-const MainContractsController = () => {
+const MainContractsController = (token_address:string) => {
   const factory = MainContractsFactory()
-  return factory.exec();
+  return factory.exec({token_address});
 }
 
 export {MainContractsController};

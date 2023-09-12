@@ -4,10 +4,14 @@ import { env } from "../env-schema";
 import { MainContractsModel } from "../model/main-contracts.model";
 import { Web3Interface } from "../repository/interfaces/web3.interface";
 
+interface MainContractsUseCaseRequest{
+  token_address:string
+}
+
 class MainContractsUseCase{
   constructor(private web3Repository:Web3Interface){}
 
-  exec():MainContractsModel{
+  exec({token_address}:MainContractsUseCaseRequest):MainContractsModel{
     const factory_contract = this.web3Repository.setContract(
       env.FACTORY,FactoryAbiData
     )
@@ -16,7 +20,11 @@ class MainContractsUseCase{
       env.WETH,Erc20AbiData
     )
 
-    return {factory_contract,weth_contract};
+      const token_contract = this.web3Repository.setContract(
+        token_address,Erc20AbiData
+      )
+
+    return {factory_contract,weth_contract,token_contract};
   }
 
 }
