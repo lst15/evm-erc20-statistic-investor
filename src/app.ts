@@ -15,7 +15,7 @@ import { AgroupingTransactionsIOController } from "./controller/agrouping-transa
   const main_contracts = MainContractsController(token_address)
   const token_info = await TokenInfoController(main_contracts,token_address)
   const transactions_io = await TransactionsIOController(main_contracts,token_info.pair as string,user_address)
-  const indexing = IndexingTransactionsController(transactions_io) 
+  const indexing = IndexingTransactionsController(transactions_io)   
   const agrouping = AgroupingTransactionsIOController(indexing)
   
 })()

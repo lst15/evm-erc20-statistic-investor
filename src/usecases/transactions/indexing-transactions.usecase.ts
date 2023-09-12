@@ -42,7 +42,17 @@ class IndexingTransactionsUseCase {
     }
 
     indexing_transaction.sort((a:any,b:any) => a.blockNumber - b.blockNumber)
-    return indexing_transaction as (EventLog & {operation:string})[]
+
+    const seenKeys:any = {};
+    const filteredArray = indexing_transaction.filter(obj => {
+      if (!seenKeys.hasOwnProperty(obj.transactionHash)) {
+        seenKeys[obj.transactionHash] = true;
+        return true;
+      }
+      return false;
+    });
+
+    return filteredArray as (EventLog & {operation:string})[]
   }
 
 }
