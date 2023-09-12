@@ -6,6 +6,7 @@ import { TransactionsIOController } from "./controller/transactions-io.controlle
 import { IndexingTransactionsController } from "./controller/indexing-transactions.controller"
 import { IndexingTransactionsModel } from "./model/indexing-transactions.model"
 import { AgroupingTransactionsIOController } from "./controller/agrouping-transactions-io.controller"
+import { CostByGroupTransactionsIoController } from "./controller/cost-by-group-transactions-io.controller"
 
 (async () => {
   
@@ -17,5 +18,6 @@ import { AgroupingTransactionsIOController } from "./controller/agrouping-transa
   const transactions_io = await TransactionsIOController(main_contracts,token_info.pair as string,user_address)
   const indexing = IndexingTransactionsController(transactions_io)   
   const agrouping = AgroupingTransactionsIOController(indexing)
+  const costGroup = CostByGroupTransactionsIoController(agrouping);
   
 })()

@@ -25,7 +25,7 @@ class AgroupingTransactionsIOUseCase {
 
     });
 
-    console.log(groups)
+    return groups
   }
 
 }
