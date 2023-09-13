@@ -14,7 +14,7 @@ class FormatTransactionsIOUseCase {
 
     cost_group.forEach(group => {
       formated.push({
-
+        hash:group.hash,
         bought:{
           eth:this.web3Repository.formatEther(group.bought),
           wei:group.bought
