@@ -1,7 +1,9 @@
 {
   "devDependencies": {
+    "@types/telebot": "^1.2.5",
     "dotenv": "^16.3.1",
     "ethers": "^6.7.1",
+    "telebot": "^1.4.1",
     "tsx": "^3.12.8",
     "typescript": "^5.2.2",
     "vitest": "^0.34.4",

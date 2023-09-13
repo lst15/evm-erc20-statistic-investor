@@ -15,9 +15,13 @@ import { CostByGroupTransactionsIoController } from "./controller/cost-by-group-
 
   const main_contracts = MainContractsController(token_address)
   const token_info = await TokenInfoController(main_contracts,token_address)
+
   const transactions_io = await TransactionsIOController(main_contracts,token_info.pair as string,user_address)
-  const indexing = IndexingTransactionsController(transactions_io)   
-  const agrouping = AgroupingTransactionsIOController(indexing)
-  const costGroup = CostByGroupTransactionsIoController(agrouping);
+  if(!transactions_io) return false;
   
+  const indexing = IndexingTransactionsController(transactions_io)   
+  const agrouping = AgroupingTransactionsIOController(indexing)  
+  const costGroup = await CostByGroupTransactionsIoController(agrouping);
+  
+  const format_transactions_group = FormatValueController(costGroup);
 })()

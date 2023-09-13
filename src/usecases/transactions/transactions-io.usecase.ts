@@ -16,20 +16,27 @@ class TransactionsIOUseCase{
 
     const pair_in_filter = main_contracts.weth_contract.filters.Transfer(null,token_pair)
     const pair_out_filter = main_contracts.weth_contract.filters.Transfer(token_pair,null)
-
+    
     const contract_in_filter =  main_contracts.token_contract.filters.Transfer(null,user_address)
     const contract_out_filter =  main_contracts.token_contract.filters.Transfer(user_address)
-
-    const pair_transactions_in = await main_contracts.weth_contract.queryFilter(pair_in_filter) as EventLog[]
-    const pair_transactions_out = await main_contracts.weth_contract.queryFilter(pair_out_filter) as EventLog[]
-
-    const contract_transactions_in = await main_contracts.token_contract.queryFilter(contract_in_filter) as EventLog[]
-    const contract_transactions_out = await main_contracts.token_contract.queryFilter(contract_out_filter) as EventLog[]
     
-    return {
-      pair_transactions:{pair_transactions_in,pair_transactions_out},
-      contract_transactions:{contract_transactions_in,contract_transactions_out}
+    try {
+      const pair_transactions_in = await main_contracts.weth_contract.queryFilter(pair_in_filter) as EventLog[]
+      const pair_transactions_out = await main_contracts.weth_contract.queryFilter(pair_out_filter) as EventLog[]
+      
+      const contract_transactions_in = await main_contracts.token_contract.queryFilter(contract_in_filter) as EventLog[]
+      const contract_transactions_out = await main_contracts.token_contract.queryFilter(contract_out_filter) as EventLog[]
+      
+      return {
+        pair_transactions:{pair_transactions_in,pair_transactions_out},
+        contract_transactions:{contract_transactions_in,contract_transactions_out}
+      }      
+    } catch (error:any) {
+      //console.log(error.error.code)
+      //throw error;
+      return error;
     }
+
   }
 
 }
