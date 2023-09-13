@@ -1,3 +1,6 @@
+import { ethers } from "ethers";
+import { env } from "../../env-schema";
+import { InternalTransactionsModel } from "../../model/internal-transactios.model";
 import { RequestsInterface } from "../../repository/interfaces/requests.interface";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
@@ -9,18 +12,31 @@ class InternalTransactionsUseCase {
   constructor(private requestRepository:RequestsInterface){}
 
   async exec({transactionHash}:InternalTransactionsUseCaseRequest){
-    const request = this.requestRepository.post(
-      "https://eth-mainnet.nodereal.io/v1/1659dfb40aa24bbb8153a677b98064d7",
+    const internal_transactions:InternalTransactionsModel[] = []
+    
+    const request = await this.requestRepository.post(
+      env.LOW_LEVEL_RPC,
       "debug_traceTransaction",
       [
-        '0x3fac854179691e377fc1aa180b71a4033b6bb3bde2a7ef00bc8e78f849ad356e',
+        transactionHash,
         {
           'tracer': 'callTracer'
         }
       ],
       1,
     )
-    console.log(request)
+
+    const calls = request.data.result.calls
+    
+    calls.forEach((call:any) => {
+      internal_transactions.push({
+        from:call.from,
+        to:call.to,
+        value:call.value ? ethers.formatEther(call.value) : call.value
+      })
+    });
+    
+    console.log(internal_transactions)
   }
 
 }

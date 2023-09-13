@@ -9,7 +9,7 @@ const envZodSchema = z.object({
     USER_ADDRESS:z.string(),
     TG_BOT_TOKEN:z.string(),
     BLOCKSCAN:z.string(),
-    LOW_LEVEL:z.string()
+    LOW_LEVEL_RPC:z.string()
 });
 
 const _env = envZodSchema.safeParse(process.env);
