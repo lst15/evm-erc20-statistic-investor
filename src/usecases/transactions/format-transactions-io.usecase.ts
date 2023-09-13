@@ -18,6 +18,7 @@ class FormatTransactionsIOUseCase {
     const approve_receipt = await this.web3Repository.getTransactionReceipt(approveHash)
 
     cost_group.forEach(group => {
+      
       formated.push({
         
         bought:{
@@ -45,6 +46,10 @@ class FormatTransactionsIOUseCase {
         approve:{
           eth:this.web3Repository.formatEther(approve_receipt.gasUsed * approve_receipt.gasPrice ),
           wei:approve_receipt.gasUsed * approve_receipt.gasPrice
+        },
+
+        bribe:{
+          eth:group.bribe
         }
 
       })

@@ -1,5 +1,9 @@
-import { EventLog } from "ethers";
+import { EventLog, ethers } from "ethers";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
+import { InternalTransactionsModel } from "../../model/internal-transactios.model";
+import { InternalTransactionsUseCase } from "./internal-transactions.usecase";
+import { RequestsInterface } from "../../repository/interfaces/requests.interface";
+import { InternalCostTransactionsUseCase } from "./internal-cost-transactions.usecase";
 
 //TODO corrigir tipagem do agroupping posteriormente
 interface CostByGroupTransactionsIOUseCaseRequest {
@@ -7,7 +11,10 @@ interface CostByGroupTransactionsIOUseCaseRequest {
 }
 
 class CostByGroupTransactionsIOUseCase {
-  constructor(private web3Repository:Web3Interface) {}
+  constructor(
+    private web3Repository:Web3Interface,
+    private requestsRepository:RequestsInterface
+  ) {}
 
   async exec({groups}:CostByGroupTransactionsIOUseCaseRequest){
 
@@ -20,10 +27,15 @@ class CostByGroupTransactionsIOUseCase {
         for(var _ in groups[index]){
           const group = groups[index][_] as EventLog & {operation:string}
 
-
+          const internal_transactions = await (new InternalTransactionsUseCase(this.requestsRepository)).exec({transactionHash:group.transactionHash})
+          const internal_cost_group = new InternalCostTransactionsUseCase(this.web3Repository).exec({internal_transactions});
+          
           if(group.operation == "buy"){
             cost_groups[index].bought = group.args[2]
             cost_groups[index].bought_hash = group.transactionHash
+            
+            cost_groups[index].bribe = Number(internal_transactions[0].value)
+            cost_groups[index].total_cost_transaction = ethers.parseEther('0') - internal_cost_group.received
           } else {
 
             cost_groups[index].sell_hash = group.transactionHash
@@ -36,7 +48,7 @@ class CostByGroupTransactionsIOUseCase {
           const transaction_receipt = await this.web3Repository.getTransactionReceipt(group.transactionHash)
 
           if(!cost_groups[index].total_cost_transaction) cost_groups[index].total_cost_transaction = transaction.value
-          else cost_groups[index].total_cost_transaction += transaction.value;        
+          else cost_groups[index].total_cost_transaction += transaction.value;                  
 
           if(!cost_groups[index].total_gasfee) cost_groups[index].total_gasfee = transaction_receipt.gasUsed * transaction_receipt.gasPrice
           else cost_groups[index].total_gasfee += transaction_receipt.gasUsed * transaction_receipt.gasPrice;          
@@ -44,7 +56,7 @@ class CostByGroupTransactionsIOUseCase {
         }
 
     }
-    console.log
+    
     return cost_groups
   }
 

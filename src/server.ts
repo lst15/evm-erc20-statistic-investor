@@ -6,11 +6,16 @@ const telegram_bot = new telebot({
   token:env.TG_BOT_TOKEN
 })
 
-telegram_bot.on(/^\/profit (.+)$/,async (msg, props) => {
+telegram_bot.on(/^\/p (.+)$/,async (msg, props) => {
   const token_address = props.match[1];
-  const message = await profit(token_address)
 
-  return telegram_bot.sendMessage(msg.from.id, message as any, { replyToMessage: msg.message_id });
+  const loading_message = await telegram_bot.sendMessage(msg.from.id, "Loading ..." as any, { replyToMessage: msg.message_id });    
+  const message = await profit(token_address)
+  if(!message){
+    return telegram_bot.editMessageText({chatId:loading_message.chat.id,messageId:loading_message.message_id},"O RPC tem um limite historico de 10 mil transações por contrato")      
+  }
+  
+  return telegram_bot.editMessageText({chatId:loading_message.chat.id,messageId:loading_message.message_id},message)
 })
 
 telegram_bot.start()

@@ -36,7 +36,7 @@ class InternalTransactionsUseCase {
       })
     });
     
-    console.log(internal_transactions)
+    return internal_transactions
   }
 
 }

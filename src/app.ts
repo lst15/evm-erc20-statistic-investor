@@ -12,6 +12,7 @@ import { env } from "./env-schema"
 import { MessageFormatTransactionsIOController } from "./controller/message-format-transactions-io.controller"
 import { EthersHttpProvider } from "./lib/ethers.provider"
 import { InternalTransactionsController } from "./controller/internal-transactions.controller"
+import { InternalCostTransactionsController } from "./controller/internal-cost-transactions.controller"
 
 export async function profit(token_address:string){
   const main_contracts = MainContractsController(token_address)
@@ -24,12 +25,13 @@ export async function profit(token_address:string){
   const agrouping = AgroupingTransactionsIOController(indexing)  
   const costGroup = await CostByGroupTransactionsIoController(agrouping);
   const formated_transactions_group = await FormatTransactionsIOController(costGroup,transactions_io);
-  
+
+  //const internal_transactions = await InternalTransactionsController("0x0f96801d6f2b73b9de37e8a120c84de621ec5f5a9f7355d91b995fbf02820806")
   return MessageFormatTransactionsIOController(token_info,formated_transactions_group);  
 }
 
 (async() => {
-  //console.log(await profit("0x71c5ba4ebf1168b26cc8ea1154458979a3f5e3e0"))
-  const internal_transactions = InternalTransactionsController("0x0f96801d6f2b73b9de37e8a120c84de621ec5f5a9f7355d91b995fbf02820806")
-  
+  console.log(await profit("0x71c5ba4ebf1168b26cc8ea1154458979a3f5e3e0"))
+  //const internal_transactions = await InternalTransactionsController("0x0f96801d6f2b73b9de37e8a120c84de621ec5f5a9f7355d91b995fbf02820806")
+  //const info_internal_cost = InternalCostTransactionsController(internal_transactions)
 })()
