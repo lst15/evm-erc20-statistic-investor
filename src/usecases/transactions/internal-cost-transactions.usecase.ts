@@ -11,22 +11,26 @@ class InternalCostTransactionsUseCase {
   constructor(private web3Repository:Web3Interface){}
 
   exec({internal_transactions}:InternalCostTransactionsUseCaseRequest){
-    const info_internal_cost = {received:ethers.parseEther('0'),paid:ethers.parseEther('0'),unknow:ethers.parseEther('0')};
+    const info_internal_cost = {
+      received:ethers.parseEther('0'),
+      paid:ethers.parseEther('0'),
+      unknow:ethers.parseEther('0'),
+      selling:ethers.parseEther('0')
+    };
 
     internal_transactions.forEach(internal_transaction => {
       if(!internal_transaction.value) return;
 
       if(internal_transaction.to == env.USER_ADDRESS) {
-        
-        if(info_internal_cost.received) {
-          info_internal_cost.received += ethers.parseEther(internal_transaction.value)
-        } else {
-          info_internal_cost.received = ethers.parseEther(internal_transaction.value)
-        }
+        info_internal_cost.received += ethers.parseEther(internal_transaction.value)
       } 
 
-    });
+      if(internal_transaction.from == env.ROUTER && internal_transaction.to == env.USER_ADDRESS){
+        info_internal_cost.selling += ethers.parseEther(internal_transaction.value)
+      }
 
+    });
+    
     return info_internal_cost
 
   }

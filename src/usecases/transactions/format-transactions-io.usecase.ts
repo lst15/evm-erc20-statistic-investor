@@ -1,21 +1,32 @@
+import { ethers } from "ethers";
 import { TransactionIOModel } from "../../model/transactions-io.model";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
 //TODO corrigir tipagem
 interface FormatTransactionsIOUseCaseRequest {
   cost_group:any[],
-  transactions_io:TransactionIOModel
+  transactions_io:TransactionIOModel,
+  contract_address:string
 }
 
 
 class FormatTransactionsIOUseCase {
   constructor(private web3Repository:Web3Interface){}
 
-  async exec({cost_group,transactions_io}:FormatTransactionsIOUseCaseRequest){
+  async exec({cost_group,transactions_io,contract_address}:FormatTransactionsIOUseCaseRequest){
     const formated:any = []
-
-    const approveHash = (transactions_io.approve_transaction as any)[0].transactionHash    
-    const approve_receipt = await this.web3Repository.getTransactionReceipt(approveHash)
+    let approve_totalgas = ethers.parseEther('0');
+    
+    for(var i in transactions_io.approve_transaction){
+      const index = parseInt(i);
+      const transaction = transactions_io.approve_transaction[index]
+      const approve_receipt = await this.web3Repository.getTransactionReceipt(transaction.transactionHash)        
+        
+      if(approve_receipt.to.toLowerCase() == contract_address) {
+        approve_totalgas += (approve_receipt.gasUsed * approve_receipt.gasPrice) as any
+      }
+        
+    }        
 
     cost_group.forEach(group => {
       
@@ -44,8 +55,8 @@ class FormatTransactionsIOUseCase {
         },
 
         approve:{
-          eth:this.web3Repository.formatEther(approve_receipt.gasUsed * approve_receipt.gasPrice ),
-          wei:approve_receipt.gasUsed * approve_receipt.gasPrice
+          eth:this.web3Repository.formatEther(approve_totalgas ),
+          wei:approve_totalgas
         },
 
         bribe:{

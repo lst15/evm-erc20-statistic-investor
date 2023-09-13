@@ -4,6 +4,7 @@ import { InternalTransactionsModel } from "../../model/internal-transactios.mode
 import { InternalTransactionsUseCase } from "./internal-transactions.usecase";
 import { RequestsInterface } from "../../repository/interfaces/requests.interface";
 import { InternalCostTransactionsUseCase } from "./internal-cost-transactions.usecase";
+import { env } from "../../env-schema";
 
 //TODO corrigir tipagem do agroupping posteriormente
 interface CostByGroupTransactionsIOUseCaseRequest {
@@ -34,14 +35,14 @@ class CostByGroupTransactionsIOUseCase {
             cost_groups[index].bought = group.args[2]
             cost_groups[index].bought_hash = group.transactionHash
             
-            cost_groups[index].bribe = Number(internal_transactions[0].value)
+            cost_groups[index].bribe = internal_transactions[0].to != env.WETH ? Number(internal_transactions[0].value) : 0
             cost_groups[index].total_cost_transaction = ethers.parseEther('0') - internal_cost_group.received
           } else {
 
             cost_groups[index].sell_hash = group.transactionHash
 
-            if(!cost_groups[index].total_sell) cost_groups[index].total_sell = group.args[2]
-            else cost_groups[index].total_sell += group.args[2];
+            if(!cost_groups[index].total_sell) cost_groups[index].total_sell = internal_cost_group.selling
+            else cost_groups[index].total_sell += internal_cost_group.selling
           }
           
           const transaction = await this.web3Repository.getTransaction(group.transactionHash)

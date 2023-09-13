@@ -21,7 +21,7 @@ class MessageFormatTransactionsIOUseCase {
       const approve = parseFloat(cost_group.approve.eth).toFixed(3)
       const txgas = parseFloat(cost_group.total_gasfee.eth).toFixed(3)
       
-      const total_spent = (Number(cost_group.bought.eth) + Number(cost_group.total_gasfee.eth) + Number(cost_group.total_cost_transaction.eth) + Number(cost_group.approve.eth)).toString()
+      const total_spent = ( Number(cost_group.total_gasfee.eth) + Number(cost_group.total_cost_transaction.eth) + Number(cost_group.approve.eth)).toString()
       const total_investiment = parseFloat(total_spent).toFixed(3)
      
       message += `Buy: ${env.BLOCKSCAN}${cost_group.bought.hash}\n`
@@ -38,11 +38,12 @@ class MessageFormatTransactionsIOUseCase {
       message += `TxGas: ${txgas}\n\n`
       
       message += `Total investiment: ${total_investiment}\n`
-      if(cost_group.total_sell.eth){
+      if(cost_group.total_sell.eth){        
         const profit = (Number(cost_group.total_sell.eth) - Number(total_spent)).toString()
         const format_profit = parseFloat(profit).toFixed(3)
-        message += `Profit: ${format_profit}\n\n`
-        
+        message += `Profit: ${format_profit}\n\n`        
+      } else {
+        message += `\n`
       }
 
     });
