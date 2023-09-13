@@ -10,6 +10,7 @@ import { CostByGroupTransactionsIoController } from "./controller/cost-by-group-
 import { FormatTransactionsIOController } from "./controller/format-transactions.io.controller"
 import { env } from "./env-schema"
 import { MessageFormatTransactionsIOController } from "./controller/message-format-transactions-io.controller"
+import { EthersHttpProvider } from "./lib/ethers.provider"
 
 export async function profit(token_address:string){
   const main_contracts = MainContractsController(token_address)
@@ -21,12 +22,11 @@ export async function profit(token_address:string){
   const indexing = IndexingTransactionsController(transactions_io)   
   const agrouping = AgroupingTransactionsIOController(indexing)  
   const costGroup = await CostByGroupTransactionsIoController(agrouping);
-  const formated_transactions_group = FormatTransactionsIOController(costGroup);
-  const message_format_transactions_group = MessageFormatTransactionsIOController(token_info,formated_transactions_group);
+  const formated_transactions_group = await FormatTransactionsIOController(costGroup,transactions_io);
   
-  //return FormatTransactionsIOController(costGroup);
+  return MessageFormatTransactionsIOController(token_info,formated_transactions_group);  
 }
 
 (async() => {
-  await profit("0x71c5ba4ebf1168b26cc8ea1154458979a3f5e3e0")
+  //console.log(await profit("0x71c5ba4ebf1168b26cc8ea1154458979a3f5e3e0"))
 })()

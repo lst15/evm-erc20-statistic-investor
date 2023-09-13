@@ -8,15 +8,7 @@ const telegram_bot = new telebot({
 
 telegram_bot.on(/^\/profit (.+)$/,async (msg, props) => {
   const token_address = props.match[1];
-  //const transactions = await profit(token_address)
-  
-  const message = `
-
-  [NAME]
-
-
-
-  `
+  const message = await profit(token_address)
 
   return telegram_bot.sendMessage(msg.from.id, message as any, { replyToMessage: msg.message_id });
 })

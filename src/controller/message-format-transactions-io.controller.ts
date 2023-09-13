@@ -1,5 +1,6 @@
 import { MessageFormatTransactionsIOFactory } from "../factory/message-format-transactions-io.factory";
 import { TokenInfoModel } from "../model/token-info.model";
+import { TransactionIOModel } from "../model/transactions-io.model";
 
 const MessageFormatTransactionsIOController = (token_info:TokenInfoModel,formated_transactions_group:any[]) => {
   const factory = MessageFormatTransactionsIOFactory()

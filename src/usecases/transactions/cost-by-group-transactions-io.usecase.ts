@@ -12,7 +12,7 @@ class CostByGroupTransactionsIOUseCase {
   async exec({groups}:CostByGroupTransactionsIOUseCaseRequest){
 
     const cost_groups:any = []
-
+    
     for(var i in groups){
       const index = parseInt(i);
       cost_groups.push([])
@@ -22,10 +22,14 @@ class CostByGroupTransactionsIOUseCase {
 
 
           if(group.operation == "buy"){
-            cost_groups[index].bought = group.args[2]  
+            cost_groups[index].bought = group.args[2]
+            cost_groups[index].bought_hash = group.transactionHash
           } else {
+
+            cost_groups[index].sell_hash = group.transactionHash
+
             if(!cost_groups[index].total_sell) cost_groups[index].total_sell = group.args[2]
-            else cost_groups[index].total_sell += group.args[2];          
+            else cost_groups[index].total_sell += group.args[2];
           }
           
           const transaction = await this.web3Repository.getTransaction(group.transactionHash)
@@ -36,10 +40,11 @@ class CostByGroupTransactionsIOUseCase {
 
           if(!cost_groups[index].total_gasfee) cost_groups[index].total_gasfee = transaction_receipt.gasUsed * transaction_receipt.gasPrice
           else cost_groups[index].total_gasfee += transaction_receipt.gasUsed * transaction_receipt.gasPrice;          
-
+          
         }
 
     }
+    console.log
     return cost_groups
   }
 
