@@ -7,6 +7,7 @@ import { IndexingTransactionsController } from "./controller/indexing-transactio
 import { IndexingTransactionsModel } from "./model/indexing-transactions.model"
 import { AgroupingTransactionsIOController } from "./controller/agrouping-transactions-io.controller"
 import { CostByGroupTransactionsIoController } from "./controller/cost-by-group-transactions-io.controller"
+import { FormatTransactionsIOController } from "./controller/format-transactions.io.controller"
 
 (async () => {
   
@@ -22,6 +23,5 @@ import { CostByGroupTransactionsIoController } from "./controller/cost-by-group-
   const indexing = IndexingTransactionsController(transactions_io)   
   const agrouping = AgroupingTransactionsIOController(indexing)  
   const costGroup = await CostByGroupTransactionsIoController(agrouping);
-  
-  const format_transactions_group = FormatValueController(costGroup);
+  const formated_cost_group = FormatTransactionsIOController(costGroup);
 })()
