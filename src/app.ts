@@ -36,4 +36,4 @@ export async function profit(token_address:string){
   console.log(await profit("0xa856f8b2cc2ac062e416da02330feb7740240f84"))
   //const internal_transactions = await InternalTransactionsController("0x0f96801d6f2b73b9de37e8a120c84de621ec5f5a9f7355d91b995fbf02820806")
   //const info_internal_cost = InternalCostTransactionsController(internal_transactions)
-})()
+})
