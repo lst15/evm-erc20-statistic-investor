@@ -38,7 +38,7 @@ class FormatTransactionsIOUseCase {
       })
     });
 
-    console.log(formated)
+    return formated
   } 
 
 }

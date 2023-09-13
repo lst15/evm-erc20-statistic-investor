@@ -5,7 +5,9 @@ const envZodSchema = z.object({
     RPC:z.string().nonempty(),
     DIFF_BLOCKS:z.string(),
     WETH:z.string(),
-    FACTORY:z.string()
+    FACTORY:z.string(),
+    USER_ADDRESS:z.string(),
+    TG_BOT_TOKEN:z.string()
 });
 
 const _env = envZodSchema.safeParse(process.env);
