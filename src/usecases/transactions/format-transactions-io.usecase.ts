@@ -1,12 +1,13 @@
-import { ethers } from "ethers";
+import { Transaction, ethers } from "ethers";
 import { TransactionIOModel } from "../../model/transactions-io.model";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
+import { MainContractsModel } from "../../model/main-contracts.model";
 
 //TODO corrigir tipagem
 interface FormatTransactionsIOUseCaseRequest {
   cost_group:any[],
   transactions_io:TransactionIOModel,
-  contract_address:string
+  contract_address:string,  
 }
 
 
@@ -16,7 +17,7 @@ class FormatTransactionsIOUseCase {
   async exec({cost_group,transactions_io,contract_address}:FormatTransactionsIOUseCaseRequest){
     const formated:any = []
     let approve_totalgas = ethers.parseEther('0');
-    
+
     for(var i in transactions_io.approve_transaction){
       const index = parseInt(i);
       const transaction = transactions_io.approve_transaction[index]
@@ -61,6 +62,10 @@ class FormatTransactionsIOUseCase {
 
         bribe:{
           eth:group.bribe
+        },
+
+        tokens_sell:{
+          wei:group.tokens_sell
         }
 
       })

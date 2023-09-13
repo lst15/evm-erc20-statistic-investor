@@ -21,7 +21,7 @@ class TransactionsIOUseCase{
     
     const contract_in_filter =  main_contracts.token_contract.filters.Transfer(null,user_address)
     const contract_out_filter =  main_contracts.token_contract.filters.Transfer(user_address)
-    
+    console
     try {
       const pair_transactions_in = await main_contracts.weth_contract.queryFilter(pair_in_filter) as EventLog[]
       const pair_transactions_out = await main_contracts.weth_contract.queryFilter(pair_out_filter) as EventLog[]

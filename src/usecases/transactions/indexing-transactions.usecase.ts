@@ -20,9 +20,8 @@ class IndexingTransactionsUseCase {
 
       transactions_io.pair_transactions?.pair_transactions_in.forEach(transactionIn => {        
 
-        if(transactionIn.transactionHash == transactionLog.transactionHash){
+        if(transactionIn.transactionHash == transactionLog.transactionHash){          
           indexing_transaction.push({...transactionIn,operation:"buy"})
-          indexing_transaction[0]
         }
         
       });
@@ -33,8 +32,9 @@ class IndexingTransactionsUseCase {
       const transactionLog = transactions_io.contract_transactions?.contract_transactions_out[index];
 
       transactions_io.pair_transactions?.pair_transactions_out.forEach(transactionOut => {        
-
+        
         if(transactionOut.transactionHash == transactionLog.transactionHash){
+          //console.log(transactionLog.transactionHash)
           indexing_transaction.push({...transactionOut,operation:"sell"})  
         }
 

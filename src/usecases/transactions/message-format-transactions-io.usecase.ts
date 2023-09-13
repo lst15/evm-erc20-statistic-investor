@@ -3,10 +3,11 @@ import { InternalTransactionsModel } from "../../model/internal-transactios.mode
 import { TokenInfoModel } from "../../model/token-info.model";
 import { TransactionIOModel } from "../../model/transactions-io.model";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
+import { LocatePersonalUnitUtils } from "../../utils/locate-personal-unit.utils";
 
 interface MessageFormatTransactionsIOUseCaseRequest {
   token_info:TokenInfoModel
-  formated_transactions_group:any[]
+  formated_transactions_group:any[],
 }
 
 class MessageFormatTransactionsIOUseCase {
@@ -35,13 +36,17 @@ class MessageFormatTransactionsIOUseCase {
       message += `Token Investiment: ${bought}\n`  
       message += `Approve: ${approve}\n`
       message += `Bribe: ${cost_group.bribe.eth}\n`
-      message += `TxGas: ${txgas}\n\n`
+      message += `TxGas: ${txgas}\n\n`      
       
       message += `Total investiment: ${total_investiment}\n`
       if(cost_group.total_sell.eth){        
         const profit = (Number(cost_group.total_sell.eth) - Number(total_spent)).toString()
+        const tokens_selled = LocatePersonalUnitUtils(cost_group.tokens_sell.wei,token_info.decimals as number)
+        const eth_selled = parseFloat(cost_group.total_sell.eth).toFixed(3)
+        message += `Token Sell: ${eth_selled}\n`
         const format_profit = parseFloat(profit).toFixed(3)
-        message += `Profit: ${format_profit}\n\n`        
+        message += `Profit: ${format_profit}\n\n`
+        
       } else {
         message += `\n`
       }

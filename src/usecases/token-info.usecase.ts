@@ -15,9 +15,10 @@ class TokenInfoUseCase {
     return {
       pair:await main_contracts.factory_contract.getPair(
         token_address,
-        env.WETH
+        env.WETH,
       ),
-      name:await main_contracts.token_contract.name()
+      name:await main_contracts.token_contract.name(),
+      decimals: await main_contracts.token_contract.decimals(),
     }
 
   }
