@@ -27,7 +27,7 @@ export async function profit(token_address:string){
   const formated_transactions_group = await FormatTransactionsIOController(costGroup,transactions_io,token_address);
 
   //const internal_transactions = await InternalTransactionsController("0x0f96801d6f2b73b9de37e8a120c84de621ec5f5a9f7355d91b995fbf02820806")
-  return MessageFormatTransactionsIOController(token_info,formated_transactions_group);  
+  return MessageFormatTransactionsIOController(token_info,formated_transactions_group,token_address);  
 }
 
 (async() => {

@@ -17,7 +17,7 @@ class InternalCostTransactionsUseCase {
       unknow:ethers.parseEther('0'),
       selling:ethers.parseEther('0')
     };
-
+    
     internal_transactions.forEach(internal_transaction => {
       if(!internal_transaction.value) return;
 

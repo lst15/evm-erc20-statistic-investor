@@ -22,8 +22,8 @@ class FormatTransactionsIOUseCase {
       const index = parseInt(i);
       const transaction = transactions_io.approve_transaction[index]
       const approve_receipt = await this.web3Repository.getTransactionReceipt(transaction.transactionHash)        
-        
-      if(approve_receipt.to.toLowerCase() == contract_address) {
+      
+      if(approve_receipt.to.toLowerCase() == contract_address.toLowerCase()) {
         approve_totalgas += (approve_receipt.gasUsed * approve_receipt.gasPrice) as any
       }
         

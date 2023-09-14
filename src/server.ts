@@ -11,6 +11,14 @@ const telegram_bot = new telebot({
 telegram_bot.on(/^\/p (.+)$/,async (msg, props) => {
   const token_address = props.match[1];
 
+  if(msg.from.id != 646283289 && msg.from.id != 797182203){
+    return await telegram_bot.sendMessage(msg.from.id, "You can't use this" as any, { replyToMessage: msg.message_id });     
+  } 
+  
+  if(env.USER_ADDRESS == "") {
+    return await telegram_bot.sendMessage(msg.from.id, "You need to set a wallet" as any, { replyToMessage: msg.message_id });     
+  }
+
   const loading_message = await telegram_bot.sendMessage(msg.from.id, "Loading ..." as any, { replyToMessage: msg.message_id });    
   const message = await profit(token_address)
   if(!message){
@@ -22,6 +30,9 @@ telegram_bot.on(/^\/p (.+)$/,async (msg, props) => {
 
 telegram_bot.on(/^\/sw (.+)$/,async (msg, props) => {
   const user_address = props.match[1];
+    if(msg.from.id != 646283289 && msg.from.id != 797182203){
+      return await telegram_bot.sendMessage(msg.from.id, "You can't use this" as any, { replyToMessage: msg.message_id });     
+    } 
 
     // read file from hdd & split if from a linebreak to a array
     const ENV_VARS = fs.readFileSync("./.env", "utf8").split(os.EOL);
@@ -32,7 +43,7 @@ telegram_bot.on(/^\/sw (.+)$/,async (msg, props) => {
     }));
 
     // replace the key/value with the new value
-    ENV_VARS.splice(target, 1, `USER_ADDRESS="${user_address}"`);
+    ENV_VARS.splice(target, 1, `USER_ADDRESS="${user_address.toLowerCase()}"`);
 
     // write everything back to the file system
     fs.writeFileSync("./.env", `${ENV_VARS.join(os.EOL)}`);
