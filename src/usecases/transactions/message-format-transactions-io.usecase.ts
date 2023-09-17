@@ -65,8 +65,15 @@ class MessageFormatTransactionsIOUseCase {
       }
       total_all_cost += total_spent;
     });
-    message += `Total all investment: ${total_all_cost}\n`;
-    message += `Total all profit: ${total_all_profit}`;
+    const format_total_all_investment = parseFloat(
+      total_all_cost.toString()
+    ).toFixed(5);
+    const format_total_all_profit = parseFloat(
+      total_all_profit.toString()
+    ).toFixed(5);
+
+    message += `Total all investment: ${format_total_all_investment}\n`;
+    message += `Total all profit: ${format_total_all_profit}`;
 
     return message;
   }
