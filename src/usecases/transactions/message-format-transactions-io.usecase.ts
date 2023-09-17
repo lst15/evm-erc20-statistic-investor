@@ -23,6 +23,7 @@ class MessageFormatTransactionsIOUseCase {
     message += `${contract_address}\n\n`;
     let total_all_cost = 0;
     let total_all_profit = 0;
+    let total_all_sell = 0;
 
     formated_transactions_group.forEach((cost_group) => {
       const bought = parseFloat(cost_group.bought.eth).toFixed(5);
@@ -50,6 +51,7 @@ class MessageFormatTransactionsIOUseCase {
 
       message += `Total investiment: ${total_investiment}\n`;
       if (cost_group.total_sell.eth) {
+        total_all_sell += parseFloat(cost_group.total_sell.eth);
         const profit = Number(cost_group.total_sell.eth) - Number(total_spent);
         const tokens_selled = LocatePersonalUnitUtils(
           cost_group.tokens_sell.wei,
@@ -71,8 +73,11 @@ class MessageFormatTransactionsIOUseCase {
     const format_total_all_profit = parseFloat(
       total_all_profit.toString()
     ).toFixed(5);
-
+    const format_total_all_sell = parseFloat(total_all_sell.toString()).toFixed(
+      5
+    );
     message += `Total all investment: ${format_total_all_investment}\n`;
+    message += `Total all sell: ${format_total_all_sell}\n`;
     message += `Total all profit: ${format_total_all_profit}`;
 
     return message;
