@@ -20,7 +20,7 @@ class MessageFormatTransactionsIOUseCase {
     contract_address,
   }: MessageFormatTransactionsIOUseCaseRequest) {
     let message = `${token_info.name}\n`;
-    message += `${contract_address}\n\n`;
+    message += "`" + contract_address + "`\n\n";
     let total_all_cost = 0;
     let total_all_profit = 0;
     let total_all_sell = 0;
@@ -44,12 +44,16 @@ class MessageFormatTransactionsIOUseCase {
         message += `\n`;
       }
 
-      message += `Token Investiment: ${bought}\n`;
-      message += `Approve: ${approve}\n`;
-      message += `Bribe: ${cost_group.bribe.eth}\n`;
-      message += `TxGas: ${txgas}\n\n`;
+      message += `Token Investiment: ` + "`" + bought + "`\n";
+      message += `Approve: ` + "`" + approve + "`\n";
+      message +=
+        `Bribe: ` +
+        "`" +
+        (isNaN(cost_group.bribe.eth) ? 0 : cost_group.bribe.eth) +
+        "`\n";
+      message += `TxGas:  ` + "`" + txgas + "`\n\n";
 
-      message += `Total investiment: ${total_investiment}\n`;
+      message += `Total investiment:  ` + "`" + total_investiment + "`\n";
       if (cost_group.total_sell.eth) {
         total_all_sell += parseFloat(cost_group.total_sell.eth);
         const profit = Number(cost_group.total_sell.eth) - Number(total_spent);
@@ -58,9 +62,9 @@ class MessageFormatTransactionsIOUseCase {
           token_info.decimals as number
         );
         const eth_selled = parseFloat(cost_group.total_sell.eth).toFixed(5);
-        message += `Token Sell: ${eth_selled}\n`;
+        message += `Token Sell:  ` + "`" + eth_selled + "`\n";
         const format_profit = parseFloat(profit.toString()).toFixed(5);
-        message += `Profit: ${format_profit}\n\n`;
+        message += `Profit:  ` + "`" + format_profit + "`\n\n";
         total_all_profit += profit;
       } else {
         message += `\n`;
@@ -76,9 +80,10 @@ class MessageFormatTransactionsIOUseCase {
     const format_total_all_sell = parseFloat(total_all_sell.toString()).toFixed(
       5
     );
-    message += `Total all investment: ${format_total_all_investment}\n`;
-    message += `Total all sell: ${format_total_all_sell}\n`;
-    message += `Total all profit: ${format_total_all_profit}`;
+    message +=
+      `Total all investment:  ` + "`" + format_total_all_investment + "`\n";
+    message += `Total all sell:  ` + "`" + format_total_all_sell + "`\n";
+    message += `Total all profit:  ` + "`" + format_total_all_profit + "`\n";
 
     return message;
   }

@@ -1,11 +1,18 @@
 import telebot from "telebot";
 import { profit } from "./app";
 import { env } from "./env-schema";
+import { ethers } from "ethers";
+import { EthersHttpProvider } from "./lib/ethers.provider";
 const fs = require("fs");
 const os = require("os");
 
 const telegram_bot = new telebot({
   token: env.TG_BOT_TOKEN,
+});
+
+telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
+  const token_address = props;
+  console.log(token_address);
 });
 
 telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
@@ -15,6 +22,23 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     return await telegram_bot.sendMessage(
       msg.from.id,
       "You can't use this" as any,
+      { replyToMessage: msg.message_id }
+    );
+  }
+  const code = await EthersHttpProvider.getCode(token_address);
+
+  if (code == "0x") {
+    return await telegram_bot.sendMessage(
+      msg.from.id,
+      "Invalid token address" as any,
+      { replyToMessage: msg.message_id }
+    );
+  }
+
+  if (!ethers.isAddress(token_address)) {
+    return await telegram_bot.sendMessage(
+      msg.from.id,
+      "Invalid token address" as any,
       { replyToMessage: msg.message_id }
     );
   }
@@ -32,7 +56,7 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     "Loading ..." as any,
     { replyToMessage: msg.message_id }
   );
-  const message = await profit(token_address);
+  const message = await profit(env.USER_ADDRESS, token_address);
 
   if (!message) {
     return telegram_bot.editMessageText(
@@ -44,14 +68,23 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     );
   }
 
-  return telegram_bot.editMessageText(
-    { chatId: loading_message.chat.id, messageId: loading_message.message_id },
-    message
-  );
+  return await telegram_bot.sendMessage(msg.from.id, message as any, {
+    replyToMessage: msg.message_id,
+    parseMode: "markdown",
+  });
 });
 
 telegram_bot.on(/^\/sw (.+)$/, async (msg, props) => {
   const user_address = props.match[1];
+
+  if (!ethers.isAddress(user_address)) {
+    return await telegram_bot.sendMessage(
+      msg.from.id,
+      "Invalid token address" as any,
+      { replyToMessage: msg.message_id }
+    );
+  }
+
   if (msg.from.id != 646283289 && msg.from.id != 797182203) {
     return await telegram_bot.sendMessage(
       msg.from.id,

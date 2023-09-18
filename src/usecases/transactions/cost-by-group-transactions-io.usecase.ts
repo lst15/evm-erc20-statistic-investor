@@ -13,6 +13,7 @@ interface CostByGroupTransactionsIOUseCaseRequest {
   groups: any;
   transaction_io: TransactionIOModel;
   main_contract: MainContractsModel;
+  user_address: string;
 }
 
 class CostByGroupTransactionsIOUseCase {
@@ -25,6 +26,7 @@ class CostByGroupTransactionsIOUseCase {
     groups,
     transaction_io,
     main_contract,
+    user_address,
   }: CostByGroupTransactionsIOUseCaseRequest) {
     const cost_groups: any = [];
     const tokens_selled_by_group: any = [];
@@ -44,7 +46,7 @@ class CostByGroupTransactionsIOUseCase {
         ).exec({ transactionHash: group.transactionHash });
         const internal_cost_group = new InternalCostTransactionsUseCase(
           this.web3Repository
-        ).exec({ internal_transactions });
+        ).exec({ user_address, internal_transactions });
 
         if (group.operation == "buy") {
           cost_groups[index].bought = group.args[2];
@@ -72,7 +74,7 @@ class CostByGroupTransactionsIOUseCase {
           else cost_groups[index].total_sell += internal_cost_group.selling;
 
           const current_tokens = await main_contract.token_contract.balanceOf(
-            env.USER_ADDRESS,
+            user_address,
             { blockTag: group.blockNumber }
           );
           total_bought -= current_tokens;
