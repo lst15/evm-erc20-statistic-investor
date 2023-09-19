@@ -23,17 +23,20 @@ class InternalCostTransactionsUseCase {
     };
 
     internal_transactions.forEach((internal_transaction) => {
+      const to = internal_transaction.to?.toLowerCase();
+      const from = internal_transaction.from?.toLowerCase();
+
       if (!internal_transaction.value) return;
 
-      if (internal_transaction.to == user_address) {
+      if (internal_transaction.to?.toLowerCase() == user_address) {
         info_internal_cost.received += ethers.parseEther(
           internal_transaction.value
         );
       }
 
       if (
-        internal_transaction.from == env.ROUTER &&
-        internal_transaction.to == user_address
+        from == env.ROUTER.toLowerCase() &&
+        to == user_address.toLowerCase()
       ) {
         info_internal_cost.selling += ethers.parseEther(
           internal_transaction.value

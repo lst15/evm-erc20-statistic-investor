@@ -3,16 +3,15 @@ import { profit } from "./app";
 import { env } from "./env-schema";
 import { ethers } from "ethers";
 import { EthersHttpProvider } from "./lib/ethers.provider";
+import { resolve } from "path";
+import { readFile, writeFileSync } from "fs";
+import * as envfile from "envfile";
+
 const fs = require("fs");
 const os = require("os");
 
 const telegram_bot = new telebot({
   token: env.TG_BOT_TOKEN,
-});
-
-telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
-  const token_address = props;
-  console.log(token_address);
 });
 
 telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
@@ -93,21 +92,12 @@ telegram_bot.on(/^\/sw (.+)$/, async (msg, props) => {
     );
   }
 
-  // read file from hdd & split if from a linebreak to a array
-  const ENV_VARS = fs.readFileSync("./.env", "utf8").split(os.EOL);
-
-  // find the env we want based on the key
-  const target = ENV_VARS.indexOf(
-    ENV_VARS.find((line: string) => {
-      return line.match(new RegExp("USER_ADDRESS"));
-    })
-  );
-
-  // replace the key/value with the new value
-  ENV_VARS.splice(target, 1, `USER_ADDRESS="${user_address.toLowerCase()}"`);
-
-  // write everything back to the file system
-  fs.writeFileSync("./.env", `${ENV_VARS.join(os.EOL)}`);
+  writeEnvToFile([
+    {
+      key: "USER_ADDRESS",
+      value: user_address.toLowerCase(),
+    },
+  ]);
   env.USER_ADDRESS = user_address;
 
   return await telegram_bot.sendMessage(
@@ -116,5 +106,31 @@ telegram_bot.on(/^\/sw (.+)$/, async (msg, props) => {
     { replyToMessage: msg.message_id }
   );
 });
+
+export const writeEnvToFile = (
+  envVariables: { key: string; value: any }[]
+): void => {
+  // get `.env` from path of current directory
+  const path = resolve(__dirname, "../.env");
+  readFile(path, "utf8", (err: any, data: any) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    const parsedFile = envfile.parse(data);
+    envVariables.forEach((envVar: { key: string; value: any }) => {
+      if (envVar.key && envVar.value) {
+        parsedFile[envVar.key] = envVar.value;
+      }
+    });
+    writeFileSync(path, envfile.stringify(parsedFile));
+
+    // NB: You should now be able to see your .env with the new values,
+    // also note that any comments or newlines will be stripped from
+    // your .env after the writeFileSync, but all your pre-existing
+    // vars should still appear the .env.
+  });
+};
 
 telegram_bot.start();
