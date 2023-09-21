@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
 import { env } from "../../env-schema";
-import { InternalTransactionsModel } from "../../model/internal-transactios.model";
+import { TxTracerModel } from "../../model/internal-transactios.model";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
 interface InternalCostTransactionsUseCaseRequest {
-  internal_transactions: InternalTransactionsModel[];
+  internal_transactions: TxTracerModel[];
   user_address: string;
 }
 

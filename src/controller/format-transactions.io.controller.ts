@@ -1,9 +1,13 @@
-import { FormatTransactionsIOFactory } from "../factory/format-transactions-io.factory"
+import { FormatTxSplitterFactory } from "../factory/format-transactions-io.factory";
 import { TransactionIOModel } from "../model/transactions-io.model";
 
-const FormatTransactionsIOController = (cost_group:any,transactions_io:TransactionIOModel,contract_address:string) => {
-  const factory = FormatTransactionsIOFactory();
-  return factory.exec({cost_group,transactions_io,contract_address});
-}
+const FormatTxSplitterController = (
+  cost_group: any,
+  txSplitter: TransactionIOModel,
+  contract_address: string
+) => {
+  const factory = FormatTxSplitterFactory();
+  return factory.exec({ cost_group, txSplitter, contract_address });
+};
 
-export{FormatTransactionsIOController};
+export { FormatTxSplitterController };

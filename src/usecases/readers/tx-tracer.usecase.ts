@@ -1,18 +1,18 @@
 import { ethers } from "ethers";
 import { env } from "../../env-schema";
-import { InternalTransactionsModel } from "../../model/internal-transactios.model";
+import { TxTracerModel } from "../../model/internal-transactios.model";
 import { RequestsInterface } from "../../repository/interfaces/requests.interface";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
-interface InternalTransactionsUseCaseRequest {
+interface TxTracerUseCaseRequest {
   transactionHash: string;
 }
 
-class InternalTransactionsUseCase {
+class TxTracerUseCase {
   constructor(private requestRepository: RequestsInterface) {}
 
-  async exec({ transactionHash }: InternalTransactionsUseCaseRequest) {
-    const internal_transactions: InternalTransactionsModel[] = [];
+  async exec({ transactionHash }: TxTracerUseCaseRequest) {
+    const internal_transactions: TxTracerModel[] = [];
 
     const request = await this.requestRepository.post(
       env.LOW_LEVEL_RPC,
@@ -36,8 +36,8 @@ class InternalTransactionsUseCase {
       });
     });
 
-    return internal_transactions;
+    return calls;
   }
 }
 
-export { InternalTransactionsUseCase };
+export { TxTracerUseCase };

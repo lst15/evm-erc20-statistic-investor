@@ -1,11 +1,19 @@
-import { MessageFormatTransactionsIOFactory } from "../factory/message-format-transactions-io.factory";
-import { InternalTransactionsModel } from "../model/internal-transactios.model";
-import { TokenInfoModel } from "../model/token-info.model";
+import { MessageFormatTxSplitterFactory } from "../factory/message-format-transactions-io.factory";
+import { TxTracerModel } from "../model/internal-transactios.model";
+import { GetTokenInfoModel } from "../model/token-info.model";
 import { TransactionIOModel } from "../model/transactions-io.model";
 
-const MessageFormatTransactionsIOController = (token_info:TokenInfoModel,formated_transactions_group:any[],contract_address:string) => {
-  const factory = MessageFormatTransactionsIOFactory()
-  return factory.exec({token_info,formated_transactions_group,contract_address});
-}
+const MessageFormatTxSplitterController = (
+  getTokenInfo: GetTokenInfoModel,
+  formated_transactions_group: any[],
+  contract_address: string
+) => {
+  const factory = MessageFormatTxSplitterFactory();
+  return factory.exec({
+    getTokenInfo,
+    formated_transactions_group,
+    contract_address,
+  });
+};
 
-export {MessageFormatTransactionsIOController};
+export { MessageFormatTxSplitterController };
