@@ -12,6 +12,7 @@ import { TraceMetricsController } from "./controller/metrics/trace-metrics.contr
 import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
 import { gasMetricsController } from "./controller/metrics/gas-metrics.controller";
 import { GasApproveMetricsController } from "./controller/metrics/gas-approve-metrics.controller";
+import { AggregatorMetricsController } from "./controller/metrics/aggregator-metrics.controller";
 
 export async function profit(user_address: string, token_address: string) {
   const build_contracts = BuildContractsController(token_address);
@@ -34,38 +35,17 @@ export async function profit(user_address: string, token_address: string) {
     txSplitter.approve_transaction as EventLog[],
     token_address
   );
-  console.log(approvesGasMetrics);
-  //console.log(txSeparator[0][0]);
-  //console.log(gasMetrics[0][0]);
   const txDebugTrace = await TxDebugTraceController(txSeparator);
-  // //console.log(txDebugTrace[0][0]);
   const traceMetrigs = TraceMetricsController(
     txDebugTrace as any,
     user_address
   );
-  console.log(traceMetrigs);
-  //console.log(txDebugTrace[0][1]);
-  // for (var groupIndex in txSeparator) {
-  //   const group = txSeparator[groupIndex];
 
-  //   for (var transactionIndex in group) {
-  //     const transaction = group[transactionIndex];
-
-  //     //if (transaction.operation == "sell") {
-  //     const tranceTransaction = await TxDebugTraceController(
-  //       transaction.transactionHash
-  //     );
-
-  //     const traceMetrics = TraceMetricsController(
-  //       tranceTransaction,
-  //       user_address
-  //     );
-
-  //     console.log(traceMetrics);
-  //     //}
-  //   }
-  // }
-  //console.log(totalTraceMetrics);
+  const aggregatorMetrics = AggregatorMetricsController(
+    approvesGasMetrics,
+    transactionsGasMetrics,
+    traceMetrigs
+  );
 }
 
 (async () => {
