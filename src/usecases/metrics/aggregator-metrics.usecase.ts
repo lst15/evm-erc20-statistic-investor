@@ -18,6 +18,8 @@ export class AggregatorMetricsUseCase {
       total_all_sell: BigInt(0),
     };
 
+    metrics.total_all_investiment += gasApproveMetrics;
+
     for (var groupIndex in traceMetrics) {
       const traceGroup = traceMetrics[groupIndex];
       const gasTransactionsGroup = gasTransactionsMetrics[groupIndex];
