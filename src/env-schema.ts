@@ -1,23 +1,27 @@
-import 'dotenv/config';
-import {z} from "zod";
+import "dotenv/config";
+import { z } from "zod";
 
 const envZodSchema = z.object({
-    RPC:z.string().nonempty(),
-    DIFF_BLOCKS:z.string(),
-    WETH:z.string(),
-    FACTORY:z.string(),
-    USER_ADDRESS:z.string(),
-    TG_BOT_TOKEN:z.string(),
-    BLOCKSCAN:z.string(),
-    LOW_LEVEL_RPC:z.string(),
-    ROUTER:z.string()
+  RPC: z.string().nonempty(),
+  DIFF_BLOCKS: z.string(),
+  WETH: z.string(),
+  FACTORY: z.string(),
+  USER_ADDRESS: z.string(),
+  TG_BOT_TOKEN: z.string(),
+  BLOCKSCAN: z.string(),
+  LOW_LEVEL_RPC: z.string(),
+  ROUTER: z.string(),
+  BANANA_BEAVEBUILDER: z.string(),
+  BANANA_ROUTER: z.string(),
+  MAESTRO_ANTBUILDER: z.string(),
+  MAESTRO_ROUTER: z.string(),
 });
 
 const _env = envZodSchema.safeParse(process.env);
 
-if(_env.success === false) {
-    console.error("invalid environment param", );
-    throw new Error("Invalid environment param");
+if (_env.success === false) {
+  console.error("invalid environment param");
+  throw new Error("Invalid environment param");
 }
 
 export const env = _env.data;
