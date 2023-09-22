@@ -1,4 +1,4 @@
-import { BananaServiceMetricsValueController } from "./controller/metrics/banana-service-metrics.controller";
+import { BananaServiceMetricsValueController } from "./controller/metrics/trace/banana-service-metrics.controller";
 import { MaestroServiceMetricsValueController } from "./controller/metrics/maestro-service-metrics.controller copy";
 import { UsuallyServiceMetricsValueController } from "./controller/metrics/usually-service-metrics.controller copy 2";
 import { env } from "./env-schema";

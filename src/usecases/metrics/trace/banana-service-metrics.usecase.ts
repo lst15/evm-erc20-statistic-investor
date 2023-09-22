@@ -1,7 +1,7 @@
 import { bigint } from "zod";
-import { env } from "../../env-schema";
-import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
-import { TxTraceMetrics } from "../../model/tx-trace-metrics-model";
+import { env } from "../../../env-schema";
+import { TxDebugTraceModel } from "../../../model/tx-debug-trace.model";
+import { TxTraceMetrics } from "../../../model/tx-trace-metrics-model";
 
 interface BananaServiceMetricsUseCaseRequest {
   txDebugTrace: TxDebugTraceModel[];

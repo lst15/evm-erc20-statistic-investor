@@ -1,5 +1,5 @@
-import { UsuallyServiceMetricsFactory } from "../../factory/metrics/usually-service-metrics.factory";
-import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
+import { UsuallyServiceMetricsFactory } from "../../../factory/metrics/trace/usually-service-metrics.factory";
+import { TxDebugTraceModel } from "../../../model/tx-debug-trace.model";
 
 export const UsuallyServiceMetricsValueController = (
   txDebugTrace: TxDebugTraceModel[],

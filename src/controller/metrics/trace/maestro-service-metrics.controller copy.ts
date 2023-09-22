@@ -1,5 +1,5 @@
-import { MaestroServiceMetricsFactory } from "../../factory/metrics/banana-service-metrics.factory";
-import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
+import { MaestroServiceMetricsFactory } from "../../../factory/metrics/trace/banana-service-metrics.factory";
+import { TxDebugTraceModel } from "../../../model/tx-debug-trace.model";
 
 export const MaestroServiceMetricsValueController = (
   txDebugTrace: TxDebugTraceModel[],
