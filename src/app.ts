@@ -25,10 +25,16 @@ export async function profit(user_address: string, token_address: string) {
   );
 
   if (!txSplitter) return false;
+  //console.log(txSplitter.approve_transaction);
   const txOtm = txOTMController(txSplitter);
   const txSeparator = TxSeparatorController(txOtm);
-  const gasMetrics = await gasMetricsController(txSeparator);
-
+  const transactionsGasMetrics = await gasMetricsController(txSeparator);
+  const approvesGasMetrics = await gasMetricsController(
+    txSplitter.approve_transaction
+  );
+  console.log(approvesGasMetrics);
+  //console.log(txSeparator[0][0]);
+  //console.log(gasMetrics[0][0]);
   // const txDebugTrace = await TxDebugTraceController(txSeparator);
   // //console.log(txDebugTrace[0][0]);
   // const traceMetrigs = TraceMetricsController(

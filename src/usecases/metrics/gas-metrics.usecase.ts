@@ -8,14 +8,21 @@ export class GasMetricsUseCase {
   constructor(private web3Repository: Web3Interface) {}
 
   async exec({ txSeparator }: GasMetricsUseCaseRequest) {
+    const metriclist: any = [];
     for (var groupIndex in txSeparator) {
       const group = txSeparator[groupIndex];
+      metriclist.push([]);
 
       for (var transactionIndex in group) {
         const transaction = group[transactionIndex];
-
-        console.log(transaction);
+        const receipt = await this.web3Repository.getTransactionReceipt(
+          transaction.transactionHash
+        );
+        const transactionFee =
+          BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice);
+        metriclist[groupIndex][transactionIndex] = transactionFee;
       }
     }
+    return metriclist;
   }
 }
