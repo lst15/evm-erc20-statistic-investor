@@ -6,11 +6,12 @@ import { TxSplitterController } from "./controller/organizers/tx-splitter";
 import { GetTokenInfoController } from "./controller/get-token-info.controller";
 import { txOTMController } from "./controller/mappers/tx-otm.controller";
 import { TxSeparatorController } from "./controller/organizers/tx-separator.controller";
-import { Transaction } from "ethers";
+import { EventLog, Transaction } from "ethers";
 import { TxDebugTraceController } from "./controller/readers/tx-debug-trace.controller";
 import { TraceMetricsController } from "./controller/metrics/trace-metrics.controller";
 import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
 import { gasMetricsController } from "./controller/metrics/gas-metrics.controller";
+import { GasApproveMetricsController } from "./controller/metrics/gas-approve-metrics.controller";
 
 export async function profit(user_address: string, token_address: string) {
   const build_contracts = BuildContractsController(token_address);
@@ -29,18 +30,20 @@ export async function profit(user_address: string, token_address: string) {
   const txOtm = txOTMController(txSplitter);
   const txSeparator = TxSeparatorController(txOtm);
   const transactionsGasMetrics = await gasMetricsController(txSeparator);
-  const approvesGasMetrics = await gasMetricsController(
-    txSplitter.approve_transaction
+  const approvesGasMetrics = await GasApproveMetricsController(
+    txSplitter.approve_transaction as EventLog[],
+    token_address
   );
   console.log(approvesGasMetrics);
   //console.log(txSeparator[0][0]);
   //console.log(gasMetrics[0][0]);
-  // const txDebugTrace = await TxDebugTraceController(txSeparator);
+  const txDebugTrace = await TxDebugTraceController(txSeparator);
   // //console.log(txDebugTrace[0][0]);
-  // const traceMetrigs = TraceMetricsController(
-  //   txDebugTrace as any,
-  //   user_address
-  // );
+  const traceMetrigs = TraceMetricsController(
+    txDebugTrace as any,
+    user_address
+  );
+  console.log(traceMetrigs);
   //console.log(txDebugTrace[0][1]);
   // for (var groupIndex in txSeparator) {
   //   const group = txSeparator[groupIndex];
