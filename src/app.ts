@@ -10,6 +10,7 @@ import { Transaction } from "ethers";
 import { TxDebugTraceController } from "./controller/readers/tx-debug-trace.controller";
 import { TraceMetricsController } from "./controller/metrics/trace-metrics.controller";
 import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
+import { gasMetricsController } from "./controller/metrics/gas-metrics.controller";
 
 export async function profit(user_address: string, token_address: string) {
   const build_contracts = BuildContractsController(token_address);
@@ -26,13 +27,15 @@ export async function profit(user_address: string, token_address: string) {
   if (!txSplitter) return false;
   const txOtm = txOTMController(txSplitter);
   const txSeparator = TxSeparatorController(txOtm);
-  const txDebugTrace = await TxDebugTraceController(txSeparator);
-  //console.log(txDebugTrace[0][0]);
-  const traceMetrigs = TraceMetricsController(
-    txDebugTrace as any,
-    user_address
-  );
-  console.log(txDebugTrace[0][1]);
+  const gasMetrics = await gasMetricsController(txSeparator);
+
+  // const txDebugTrace = await TxDebugTraceController(txSeparator);
+  // //console.log(txDebugTrace[0][0]);
+  // const traceMetrigs = TraceMetricsController(
+  //   txDebugTrace as any,
+  //   user_address
+  // );
+  //console.log(txDebugTrace[0][1]);
   // for (var groupIndex in txSeparator) {
   //   const group = txSeparator[groupIndex];
 
