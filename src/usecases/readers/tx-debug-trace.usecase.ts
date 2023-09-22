@@ -3,28 +3,29 @@ import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
 import { RequestsInterface } from "../../repository/interfaces/requests.interface";
 
 interface TxDebugTraceUseCaseRequest {
-  transactionHash: string;
+  txSeparator: any;
 }
 
 class TxDebugTraceUseCase {
   constructor(private requestRepository: RequestsInterface) {}
 
-  async exec({
-    transactionHash,
-  }: TxDebugTraceUseCaseRequest): Promise<TxDebugTraceModel[]> {
-    const request = await this.requestRepository.post(
-      env.LOW_LEVEL_RPC,
-      "debug_traceTransaction",
-      [
-        transactionHash,
-        {
-          tracer: "callTracer",
-        },
-      ],
-      1
-    );
+  async exec({ txSeparator }: TxDebugTraceUseCaseRequest) {
+    let debugTraceList: any = [];
 
-    return request.data.result.calls;
+    for (var groupIndex in txSeparator) {
+      const group = txSeparator[groupIndex];
+      debugTraceList.push([]);
+
+      for (var transactionIndex in group) {
+        const transaction = group[transactionIndex];
+        const debugTrace = await this.requestRepository.debugTraceTransaction(
+          transaction.transactionHash
+        );
+        debugTraceList[groupIndex][transactionIndex] = debugTrace;
+      }
+    }
+
+    return debugTraceList;
   }
 }
 

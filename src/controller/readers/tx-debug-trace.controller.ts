@@ -1,8 +1,8 @@
 import { TxDebugTraceFactory } from "../../factory/readers/tx-debug-trace.factory";
 
-const TxDebugTraceController = (transactionHash: string) => {
+const TxDebugTraceController = (txSeparator: any) => {
   const factory = TxDebugTraceFactory();
-  return factory.exec({ transactionHash });
+  return factory.exec({ txSeparator });
 };
 
 export { TxDebugTraceController };

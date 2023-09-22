@@ -1,5 +1,5 @@
 import { EventLog } from "ethers";
-import { Web3Interface } from "../../../repository/interfaces/web3.interface";
+import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
 //TODO corrigir tipagem da indexação
 interface TxSeparatorUseCaseRequest {

@@ -9,6 +9,7 @@ import { TxSeparatorController } from "./controller/organizers/tx-separator.cont
 import { Transaction } from "ethers";
 import { TxDebugTraceController } from "./controller/readers/tx-debug-trace.controller";
 import { TraceMetricsController } from "./controller/metrics/trace-metrics.controller";
+import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
 
 export async function profit(user_address: string, token_address: string) {
   const build_contracts = BuildContractsController(token_address);
@@ -25,25 +26,38 @@ export async function profit(user_address: string, token_address: string) {
   if (!txSplitter) return false;
   const txOtm = txOTMController(txSplitter);
   const txSeparator = TxSeparatorController(txOtm);
+  const txDebugTrace = await TxDebugTraceController(txSeparator);
+  //console.log(txDebugTrace[0][0]);
+  const traceMetrigs = TraceMetricsController(
+    txDebugTrace as any,
+    user_address
+  );
+  console.log(txDebugTrace[0][1]);
+  // for (var groupIndex in txSeparator) {
+  //   const group = txSeparator[groupIndex];
 
-  txSeparator.forEach((group: any) => {
-    group.forEach(async (transaction: any) => {
-      if (transaction.operation == "buy") {
-        const tranceTransaction = await TxDebugTraceController(
-          transaction.transactionHash
-        );
-        const traceMetrics = TraceMetricsController(
-          tranceTransaction,
-          user_address
-        );
-        console.log(traceMetrics);
-      }
-    });
-  });
+  //   for (var transactionIndex in group) {
+  //     const transaction = group[transactionIndex];
+
+  //     //if (transaction.operation == "sell") {
+  //     const tranceTransaction = await TxDebugTraceController(
+  //       transaction.transactionHash
+  //     );
+
+  //     const traceMetrics = TraceMetricsController(
+  //       tranceTransaction,
+  //       user_address
+  //     );
+
+  //     console.log(traceMetrics);
+  //     //}
+  //   }
+  // }
+  //console.log(totalTraceMetrics);
 }
 
 (async () => {
   console.log(
-    await profit(env.USER_ADDRESS, "0x7a2631aa3590fd6361d2d7afb51d5fe9d33ab2ec")
+    await profit(env.USER_ADDRESS, "0x4caed4056c99b9efcd2c85ecd34ad3f7b2d09544")
   );
 })();
