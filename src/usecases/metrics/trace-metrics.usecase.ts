@@ -1,15 +1,14 @@
-import { bigint } from "zod";
-import { env } from "../../../env-schema";
-import { TxDebugTraceModel } from "../../../model/tx-debug-trace.model";
-import { TxTraceMetrics } from "../../../model/tx-trace-metrics-model";
+import { env } from "../../env-schema";
+import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
+import { TxTraceMetrics } from "../../model/tx-trace-metrics-model";
 
-interface MaestroServiceMetricsUseCaseRequest {
+interface TraceMetricsUseCaseRequest {
   txDebugTrace: TxDebugTraceModel[];
   user_address: string;
 }
 
-export class MaestroServiceMetricsUseCase {
-  exec({ txDebugTrace, user_address }: MaestroServiceMetricsUseCaseRequest) {
+export class TraceMetricsUseCase {
+  exec({ txDebugTrace, user_address }: TraceMetricsUseCaseRequest) {
     let metrics: TxTraceMetrics = {
       bribe: BigInt(0),
       devolution: BigInt(0),
@@ -17,10 +16,17 @@ export class MaestroServiceMetricsUseCase {
     };
 
     txDebugTrace.forEach((transaction: TxDebugTraceModel) => {
-      if (transaction.from == env.MAESTRO_ROUTER) {
+      if (
+        transaction.from == env.MAESTRO_ROUTER ||
+        transaction.from == env.BANANA_ROUTER ||
+        transaction.from == env.ROUTER
+      ) {
         if (!transaction.value) return;
 
-        if (transaction.to == env.MAESTRO_ANTBUILDER) {
+        if (
+          transaction.to == env.MAESTRO_ANTBUILDER ||
+          transaction.to == env.BANANA_BEAVEBUILDER
+        ) {
           metrics.bribe += BigInt(transaction.value);
         }
 
