@@ -22,7 +22,7 @@ export class GasApproveMetricsUseCase {
         transaction.transactionHash
       );
 
-      if (receipt.to.toLowerCase() == token_address) {
+      if (receipt.to.toLowerCase() == token_address.toLowerCase()) {
         const transactionFee =
           BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice);
         total += transactionFee;
