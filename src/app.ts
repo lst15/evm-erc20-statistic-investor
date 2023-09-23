@@ -46,6 +46,7 @@ export async function profit(user_address: string, token_address: string) {
     transactionsGasMetrics,
     traceMetrigs
   );
+  console.log(txSeparator);
 }
 
 (async () => {
