@@ -4,7 +4,10 @@ export function BuildMessageController(
   gasApproveMetrics: any,
   gasTransactionsMetrics: any,
   traceMetrics: any,
-  txSeparator: any
+  txSeparator: any,
+  aggregatorMetrics: any,
+  token_name: any,
+  token_address: any
 ) {
   const factory = BuildMessageFactory();
   return factory.exec({
@@ -12,5 +15,8 @@ export function BuildMessageController(
     gasTransactionsMetrics,
     traceMetrics,
     txSeparator,
+    aggregatorMetrics,
+    token_name,
+    token_address,
   });
 }

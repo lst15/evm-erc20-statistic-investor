@@ -13,6 +13,7 @@ import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
 import { gasMetricsController } from "./controller/metrics/gas-metrics.controller";
 import { GasApproveMetricsController } from "./controller/metrics/gas-approve-metrics.controller";
 import { AggregatorMetricsController } from "./controller/metrics/aggregator-metrics.controller";
+import { BuildMessageController } from "./controller/organizers/build-message.controller";
 
 export async function profit(user_address: string, token_address: string) {
   const build_contracts = BuildContractsController(token_address);
@@ -46,11 +47,22 @@ export async function profit(user_address: string, token_address: string) {
     transactionsGasMetrics,
     traceMetrigs
   );
-  console.log(txSeparator);
+
+  const message = BuildMessageController(
+    approvesGasMetrics,
+    transactionsGasMetrics,
+    traceMetrigs,
+    txSeparator,
+    aggregatorMetrics,
+    getTokenInfo.name,
+    token_address
+  );
+
+  return message;
 }
 
-(async () => {
+async () => {
   console.log(
     await profit(env.USER_ADDRESS, "0x4caed4056c99b9efcd2c85ecd34ad3f7b2d09544")
   );
-})();
+};

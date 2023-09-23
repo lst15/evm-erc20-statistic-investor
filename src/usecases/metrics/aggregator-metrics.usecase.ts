@@ -18,7 +18,7 @@ export class AggregatorMetricsUseCase {
       total_all_sell: BigInt(0),
     };
 
-    metrics.total_all_investiment += gasApproveMetrics;
+    //metrics.total_all_investiment += gasApproveMetrics;
 
     for (var groupIndex in traceMetrics) {
       const traceGroup = traceMetrics[groupIndex];
@@ -34,6 +34,8 @@ export class AggregatorMetricsUseCase {
         metrics.total_all_sell += traceTransaction.received_onSell;
       }
     }
-    console.log(metrics);
+    metrics.total_all_profit =
+      metrics.total_all_sell - metrics.total_all_investiment;
+    return metrics;
   }
 }

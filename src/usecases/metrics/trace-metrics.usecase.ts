@@ -37,7 +37,6 @@ export class TraceMetricsUseCase {
               transaction.to == env.MAESTRO_ANTBUILDER ||
               transaction.to == env.BANANA_BEAVEBUILDER
             ) {
-              console.log(transaction.gasUsed);
               metrics.bribe += BigInt(transaction.value);
             }
             if (transaction.to == env.WETH) {
