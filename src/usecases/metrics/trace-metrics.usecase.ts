@@ -5,10 +5,11 @@ import { TxTraceMetrics } from "../../model/tx-trace-metrics-model";
 interface TraceMetricsUseCaseRequest {
   txDebugTrace: any;
   user_address: string;
+  txOtm: any;
 }
 
 export class TraceMetricsUseCase {
-  exec({ txDebugTrace, user_address }: TraceMetricsUseCaseRequest) {
+  exec({ txDebugTrace, user_address, txOtm }: TraceMetricsUseCaseRequest) {
     const metriclist: any = [];
     for (var groupIndex in txDebugTrace) {
       const group = txDebugTrace[groupIndex];
@@ -16,6 +17,7 @@ export class TraceMetricsUseCase {
 
       for (var traceTransactionIndex in group) {
         const traceTransaction = group[traceTransactionIndex];
+        const txOtmTransaction = txOtm[traceTransactionIndex];
 
         let metrics: TxTraceMetrics = {
           bribe: BigInt(0),
@@ -26,7 +28,7 @@ export class TraceMetricsUseCase {
 
         for (var transactionIndex in traceTransaction) {
           const transaction = traceTransaction[transactionIndex];
-
+          //console.log(transaction.input);
           if (
             transaction.from == env.MAESTRO_ROUTER ||
             transaction.from == env.BANANA_ROUTER ||
@@ -41,7 +43,10 @@ export class TraceMetricsUseCase {
             ) {
               metrics.bribe += BigInt(transaction.value);
             }
-            if (transaction.to == env.WETH && metrics.purchase == BigInt(0)) {
+            if (
+              transaction.to == env.WETH &&
+              txOtmTransaction.operation == "buy"
+            ) {
               metrics.purchase += BigInt(transaction.value);
             }
             if (transaction.to == user_address) {
@@ -50,9 +55,9 @@ export class TraceMetricsUseCase {
           }
           if (
             transaction.from == env.ROUTER &&
-            transaction.to == user_address
+            transaction.to == user_address &&
+            txOtmTransaction.operation == "sell"
           ) {
-            console.log(BigInt(transaction.value));
             if (!transaction.value) continue;
             metrics.received_onSell += BigInt(transaction.value);
           }

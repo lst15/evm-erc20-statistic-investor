@@ -30,6 +30,7 @@ export async function profit(user_address: string, token_address: string) {
   if (!txSplitter) return false;
   //console.log(txSplitter.approve_transaction);
   const txOtm = txOTMController(txSplitter);
+  //console.log(txOtm);
   const txSeparator = TxSeparatorController(txOtm);
   const transactionsGasMetrics = await gasMetricsController(txSeparator);
   const approvesGasMetrics = await GasApproveMetricsController(
@@ -39,7 +40,8 @@ export async function profit(user_address: string, token_address: string) {
   const txDebugTrace = await TxDebugTraceController(txSeparator);
   const traceMetrigs = TraceMetricsController(
     txDebugTrace as any,
-    user_address
+    user_address,
+    txOtm
   );
 
   const aggregatorMetrics = AggregatorMetricsController(
@@ -61,8 +63,6 @@ export async function profit(user_address: string, token_address: string) {
   return message;
 }
 
-async () => {
-  console.log(
-    await profit(env.USER_ADDRESS, "0x4caed4056c99b9efcd2c85ecd34ad3f7b2d09544")
-  );
-};
+(async () => {
+  await profit(env.USER_ADDRESS, "0x7e52eb9fadb02f95de1eb8634dc0b4bbd4628f38");
+})();
