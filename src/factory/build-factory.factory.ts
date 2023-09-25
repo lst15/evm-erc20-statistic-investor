@@ -1,5 +1,5 @@
 import { EthersWeb3Implementation } from "../repository/implementations/ethers-web3.implementation";
-import { BuildContractsUseCase } from "../usecases/build-contracts.usecase";
+import { BuildContractsUseCase } from "../usecases/organizers/build-contracts.usecase";
 
 function BuildContractsFactory() {
   const web3Repository = new EthersWeb3Implementation();

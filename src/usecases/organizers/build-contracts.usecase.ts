@@ -1,8 +1,8 @@
-import { Erc20AbiData } from "../data/erc20-abi.data";
-import { FactoryAbiData } from "../data/factory-abi.data";
-import { env } from "../env-schema";
-import { BuildContractsModel } from "../model/main-contracts.model";
-import { Web3Interface } from "../repository/interfaces/web3.interface";
+import { Erc20AbiData } from "../../data/erc20-abi.data";
+import { FactoryAbiData } from "../../data/factory-abi.data";
+import { env } from "../../env-schema";
+import { BuildContractsModel } from "../../model/main-contracts.model";
+import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
 interface BuildContractsUseCaseRequest {
   token_address: string;
