@@ -34,12 +34,14 @@ export class TraceMetricsUseCase {
           ) {
             if (!transaction.value) continue;
             if (
-              transaction.to == env.MAESTRO_ANTBUILDER ||
-              transaction.to == env.BANANA_BEAVEBUILDER
+              //transaction.to == env.MAESTRO_ANTBUILDER ||
+              //transaction.to == env.BANANA_BEAVEBUILDER
+              transaction.to != env.WETH.toLowerCase() &&
+              transaction.to != user_address
             ) {
               metrics.bribe += BigInt(transaction.value);
             }
-            if (transaction.to == env.WETH) {
+            if (transaction.to == env.WETH && metrics.purchase == BigInt(0)) {
               metrics.purchase += BigInt(transaction.value);
             }
             if (transaction.to == user_address) {
@@ -50,6 +52,7 @@ export class TraceMetricsUseCase {
             transaction.from == env.ROUTER &&
             transaction.to == user_address
           ) {
+            console.log(BigInt(transaction.value));
             if (!transaction.value) continue;
             metrics.received_onSell += BigInt(transaction.value);
           }

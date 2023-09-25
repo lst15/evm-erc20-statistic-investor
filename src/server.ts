@@ -55,7 +55,10 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     "Loading ..." as any,
     { replyToMessage: msg.message_id }
   );
-  const message = await profit(env.USER_ADDRESS, token_address);
+  const message = await profit(
+    env.USER_ADDRESS.toLowerCase(),
+    token_address.toLowerCase()
+  );
 
   if (!message) {
     return telegram_bot.editMessageText(
