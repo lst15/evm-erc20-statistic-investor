@@ -49,12 +49,8 @@ export class TraceMetricsUseCase {
             ) {
               metrics.purchase += BigInt(transaction.value);
             }
-            if (transaction.to == user_address) {
-              metrics.devolution += BigInt(transaction.value);
-            }
           }
           if (
-            transaction.from == env.ROUTER &&
             transaction.to == user_address &&
             txOtmTransaction.operation == "sell"
           ) {
