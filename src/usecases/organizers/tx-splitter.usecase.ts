@@ -79,7 +79,6 @@ class TxSplitterUseCase {
 
       approve_transaction.forEach((log) => {
         transactions.approves.push(log);
-        console.log(log);
       });
 
       pair_transactions_in.forEach((log) => {
