@@ -34,7 +34,7 @@ export async function profit(user_addresses: string[], token_address: string) {
     txSplitter.approves as EventLog[],
     token_address
   );
-  console.log(approvesGasMetrics);
+
   const txDebugTrace = await TxDebugTraceController(txOtm);
 
   const purchaseMetric = PurchaseMetricController(
