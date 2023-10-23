@@ -34,7 +34,7 @@ export async function profit(user_addresses: string[], token_address: string) {
     txSplitter.approves as EventLog[],
     token_address
   );
-
+  console.log(approvesGasMetrics);
   const txDebugTrace = await TxDebugTraceController(txOtm);
 
   const purchaseMetric = PurchaseMetricController(
@@ -66,13 +66,15 @@ export async function profit(user_addresses: string[], token_address: string) {
 }
 
 async () => {
+  console.log("[requesting]");
   const msg = await profit(
     [
-      "0x56dDd01A8E741c1770E6FdCDeAC0848b610dbdCb".toLowerCase(),
-      "0xF5B158128C1c7538C95B19e9C45348FC18F1601C".toLowerCase(),
-      "0x5fc666D2FB6F310241567166a779d4038D8e986b".toLowerCase(),
+      "0x615ad11efc171e141c60be917a7a5913fcd96201".toLowerCase(),
+      "0xb37042f3707d30a62de4ad023b3f85df32d4870d".toLowerCase(),
+      "0xb5aa1826fe5871ad54f507f70cf6971ec9fd9d7b".toLowerCase(),
+      "0x8ea294c42b17e335b2dfff2501f6f9a4c65b605c".toLowerCase(),
     ],
-    "0xfCA99357C85F12E11F287648270E0689de3ea107".toLowerCase()
+    "0xe784d58a669011311cf02880ec35657aef6e59e6".toLowerCase()
   );
   console.log(msg);
 };

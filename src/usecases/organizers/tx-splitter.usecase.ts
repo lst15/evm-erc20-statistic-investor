@@ -36,7 +36,7 @@ class TxSplitterUseCase {
 
       const approve_filter = build_contracts.token_contract.filters.Approval(
         address,
-        env.ROUTER
+        null
       );
 
       const pair_in_filter = build_contracts.weth_contract.filters.Transfer(
@@ -79,6 +79,7 @@ class TxSplitterUseCase {
 
       approve_transaction.forEach((log) => {
         transactions.approves.push(log);
+        console.log(log);
       });
 
       pair_transactions_in.forEach((log) => {
