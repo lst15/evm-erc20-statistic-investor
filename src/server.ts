@@ -1,6 +1,6 @@
 import telebot from "telebot";
 import { profit } from "./app";
-import { env } from "./env-schema";
+import { env, removeWallet, wallets } from "./env-schema";
 import { ethers } from "ethers";
 import { EthersHttpProvider } from "./lib/ethers.provider";
 import { resolve } from "path";
@@ -42,7 +42,7 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     );
   }
 
-  if (env.USER_ADDRESS == "") {
+  if (wallets.length == 0) {
     return await telegram_bot.sendMessage(
       msg.from.id,
       "You need to set a wallet" as any,
@@ -55,10 +55,8 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
     "Loading ..." as any,
     { replyToMessage: msg.message_id }
   );
-  const message = await profit(
-    env.USER_ADDRESS.toLowerCase(),
-    token_address.toLowerCase()
-  );
+  console.log(`[requesting] ${token_address}`);
+  const message = await profit(wallets, token_address.toLowerCase());
 
   if (!message) {
     return telegram_bot.editMessageText(
@@ -76,37 +74,88 @@ telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {
   });
 });
 
-telegram_bot.on(/^\/sw (.+)$/, async (msg, props) => {
-  const user_address = props.match[1];
+// telegram_bot.on(/^\/addwallet (.+)$/, async (msg, props) => {
+//   const user_address = props.match[1];
+
+//   if (!ethers.isAddress(user_address)) {
+//     return await telegram_bot.sendMessage(
+//       msg.from.id,
+//       "Invalid token address" as any,
+//       { replyToMessage: msg.message_id }
+//     );
+//   }
+
+//   if (msg.from.id != 646283289 && msg.from.id != 797182203) {
+//     return await telegram_bot.sendMessage(
+//       msg.from.id,
+//       "You can't use this" as any,
+//       { replyToMessage: msg.message_id }
+//     );
+//   }
+
+telegram_bot.on(/^\/addwallet (.+)$/, async (msg, props) => {
+  const user_address = props.match[1].toLowerCase();
+  if (wallets.includes(user_address)) {
+    return await telegram_bot.sendMessage(
+      msg.from.id,
+      "Wallet already added" as any,
+      {
+        replyToMessage: msg.message_id,
+      }
+    );
+  }
 
   if (!ethers.isAddress(user_address)) {
     return await telegram_bot.sendMessage(
       msg.from.id,
-      "Invalid token address" as any,
-      { replyToMessage: msg.message_id }
+      "That isn't a valid address" as any,
+      {
+        replyToMessage: msg.message_id,
+      }
     );
   }
 
-  if (msg.from.id != 646283289 && msg.from.id != 797182203) {
-    return await telegram_bot.sendMessage(
-      msg.from.id,
-      "You can't use this" as any,
-      { replyToMessage: msg.message_id }
-    );
-  }
-
-  writeEnvToFile([
-    {
-      key: "USER_ADDRESS",
-      value: user_address.toLowerCase(),
-    },
-  ]);
-  env.USER_ADDRESS = user_address;
+  wallets.push(user_address);
 
   return await telegram_bot.sendMessage(
     msg.from.id,
-    "Wallet address was updated with success " as any,
-    { replyToMessage: msg.message_id }
+    "Wallet added with success" as any,
+    {
+      replyToMessage: msg.message_id,
+    }
+  );
+});
+
+telegram_bot.on(/^\/rmwallet (.+)$/, async (msg, props) => {
+  const user_address = props.match[1].toLowerCase();
+
+  if (!wallets.includes(user_address)) {
+    return await telegram_bot.sendMessage(
+      msg.from.id,
+      "Wallet not found" as any,
+      {
+        replyToMessage: msg.message_id,
+      }
+    );
+  }
+
+  removeWallet(user_address.toLowerCase());
+  return await telegram_bot.sendMessage(
+    msg.from.id,
+    "Wallet removed with success" as any,
+    {
+      replyToMessage: msg.message_id,
+    }
+  );
+});
+
+telegram_bot.on("/wallets", async (msg, props) => {
+  return await telegram_bot.sendMessage(
+    msg.from.id,
+    wallets.join("\n") as any,
+    {
+      replyToMessage: msg.message_id,
+    }
   );
 });
 

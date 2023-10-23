@@ -1,28 +1,26 @@
+import { EventLog } from "ethers";
 import { env } from "../../env-schema";
 import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
 import { RequestsInterface } from "../../repository/interfaces/requests.interface";
 
 interface TxDebugTraceUseCaseRequest {
-  txSeparator: any;
+  txOtm: (EventLog & {
+    operation: string;
+  })[];
 }
 
 class TxDebugTraceUseCase {
   constructor(private requestRepository: RequestsInterface) {}
 
-  async exec({ txSeparator }: TxDebugTraceUseCaseRequest) {
+  async exec({ txOtm }: TxDebugTraceUseCaseRequest) {
     let debugTraceList: any = [];
 
-    for (var groupIndex in txSeparator) {
-      const group = txSeparator[groupIndex];
-      debugTraceList.push([]);
-
-      for (var transactionIndex in group) {
-        const transaction = group[transactionIndex];
-        const debugTrace = await this.requestRepository.debugTraceTransaction(
-          transaction.transactionHash
-        );
-        debugTraceList[groupIndex][transactionIndex] = debugTrace;
-      }
+    for (var eventIndex in txOtm) {
+      const eventLog = txOtm[eventIndex];
+      const debugTrace = await this.requestRepository.debugTraceTransaction(
+        eventLog.transactionHash
+      );
+      debugTraceList.push(debugTrace);
     }
 
     return debugTraceList;

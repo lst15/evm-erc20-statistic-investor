@@ -1,68 +1,82 @@
-import { env } from "./env-schema";
-import { InternalCostTransactionsFactory } from "./factory/internal-cost-transactions.factory";
-import { TxDebugTraceFactory } from "./factory/readers/tx-debug-trace.factory";
 import { BuildContractsController } from "./controller/build-contracts.controller";
 import { TxSplitterController } from "./controller/organizers/tx-splitter";
 import { GetTokenInfoController } from "./controller/get-token-info.controller";
 import { txOTMController } from "./controller/mappers/tx-otm.controller";
-import { TxSeparatorController } from "./controller/organizers/tx-separator.controller";
-import { EventLog, Transaction } from "ethers";
+import { EventLog } from "ethers";
 import { TxDebugTraceController } from "./controller/readers/tx-debug-trace.controller";
-import { TraceMetricsController } from "./controller/metrics/trace-metrics.controller";
-import { TxTraceMetrics } from "./model/tx-trace-metrics-model";
 import { gasMetricsController } from "./controller/metrics/gas-metrics.controller";
 import { GasApproveMetricsController } from "./controller/metrics/gas-approve-metrics.controller";
 import { AggregatorMetricsController } from "./controller/metrics/aggregator-metrics.controller";
 import { BuildMessageController } from "./controller/organizers/build-message.controller";
+import { PurchaseMetricController } from "./controller/metrics/purchase-metric.controller";
+import { SellMetricController } from "./controller/metrics/sell-metric.controller copy";
 
-export async function profit(user_address: string, token_address: string) {
+export async function profit(user_addresses: string[], token_address: string) {
   const build_contracts = BuildContractsController(token_address);
   const getTokenInfo = await GetTokenInfoController(
     build_contracts,
     token_address
   );
+
   const txSplitter = await TxSplitterController(
     build_contracts,
     getTokenInfo.pair as string,
-    user_address
+    user_addresses
   );
 
-  if (!txSplitter) return false;
-  //console.log(txSplitter.approve_transaction);
+  if (!txSplitter) return;
+
   const txOtm = txOTMController(txSplitter);
-  //console.log(txOtm);
-  const txSeparator = TxSeparatorController(txOtm);
-  const transactionsGasMetrics = await gasMetricsController(txSeparator);
+  //console.log(txOtm[0]);
+  const transactionsGasMetrics = await gasMetricsController(txOtm);
+
   const approvesGasMetrics = await GasApproveMetricsController(
-    txSplitter.approve_transaction as EventLog[],
+    txSplitter.approves as EventLog[],
     token_address
   );
-  const txDebugTrace = await TxDebugTraceController(txSeparator);
-  const traceMetrigs = TraceMetricsController(
-    txDebugTrace as any,
-    user_address,
+
+  const txDebugTrace = await TxDebugTraceController(txOtm);
+
+  const purchaseMetric = PurchaseMetricController(
+    txDebugTrace,
+    user_addresses,
     txOtm
   );
+
+  const sellMetric = SellMetricController(txDebugTrace, user_addresses, txOtm);
 
   const aggregatorMetrics = AggregatorMetricsController(
     approvesGasMetrics,
     transactionsGasMetrics,
-    traceMetrigs
+    purchaseMetric,
+    sellMetric
   );
 
   const message = BuildMessageController(
     approvesGasMetrics,
     transactionsGasMetrics,
-    traceMetrigs,
-    txSeparator,
     aggregatorMetrics,
     getTokenInfo.name,
-    token_address
+    token_address,
+    purchaseMetric,
+    sellMetric
   );
+
+  txOtm.forEach((element) => {
+    console.log(element.transactionHash);
+  });
 
   return message;
 }
 
-(async () => {
-  await profit(env.USER_ADDRESS, "0x7e52eb9fadb02f95de1eb8634dc0b4bbd4628f38");
-})();
+async () => {
+  const msg = await profit(
+    [
+      "0x56dDd01A8E741c1770E6FdCDeAC0848b610dbdCb".toLowerCase(),
+      "0xF5B158128C1c7538C95B19e9C45348FC18F1601C".toLowerCase(),
+      "0x5fc666D2FB6F310241567166a779d4038D8e986b".toLowerCase(),
+    ],
+    "0xfCA99357C85F12E11F287648270E0689de3ea107".toLowerCase()
+  );
+  console.log(msg);
+};

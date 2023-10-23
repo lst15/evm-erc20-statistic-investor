@@ -1,27 +1,27 @@
+import { EventLog } from "ethers";
+import { TxOtmModel } from "../../model/tx-otm.model";
 import { Web3Interface } from "../../repository/interfaces/web3.interface";
 
 interface GasMetricsUseCaseRequest {
-  txSeparator: any;
+  txOtm: (EventLog & {
+    operation: string;
+  })[];
 }
 
 export class GasMetricsUseCase {
   constructor(private web3Repository: Web3Interface) {}
 
-  async exec({ txSeparator }: GasMetricsUseCaseRequest) {
+  async exec({ txOtm }: GasMetricsUseCaseRequest) {
     const metriclist: any = [];
-    for (var groupIndex in txSeparator) {
-      const group = txSeparator[groupIndex];
-      metriclist.push([]);
+    for (var eventIndex in txOtm) {
+      const event = txOtm[eventIndex];
 
-      for (var transactionIndex in group) {
-        const transaction = group[transactionIndex];
-        const receipt = await this.web3Repository.getTransactionReceipt(
-          transaction.transactionHash
-        );
-        const transactionFee =
-          BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice);
-        metriclist[groupIndex][transactionIndex] = transactionFee;
-      }
+      const receipt = await this.web3Repository.getTransactionReceipt(
+        event.transactionHash
+      );
+
+      const transactionFee = BigInt(receipt.gasUsed) * BigInt(receipt.gasPrice);
+      metriclist[eventIndex] = transactionFee;
     }
     return metriclist;
   }

@@ -4,7 +4,7 @@ import { BuildContractsModel } from "../../model/main-contracts.model";
 const TxSplitterController = async (
   build_contracts: BuildContractsModel,
   token_pair: string,
-  user_address: string
+  user_address: string[]
 ) => {
   const factory = TxSplitterFactory();
   const execute = await factory.exec({

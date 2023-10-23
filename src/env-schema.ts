@@ -18,10 +18,15 @@ const envZodSchema = z.object({
 });
 
 const _env = envZodSchema.safeParse(process.env);
+export let wallets: string[] = [];
 
 if (_env.success === false) {
   console.error("invalid environment param");
   throw new Error("Invalid environment param");
+}
+
+export function removeWallet(address: string) {
+  wallets = wallets.filter((wallet) => wallet != address);
 }
 
 export const env = _env.data;

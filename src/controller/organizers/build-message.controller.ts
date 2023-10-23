@@ -3,20 +3,25 @@ import { BuildMessageFactory } from "../../factory/organizers/build-message.fact
 export function BuildMessageController(
   gasApproveMetrics: any,
   gasTransactionsMetrics: any,
-  traceMetrics: any,
-  txSeparator: any,
   aggregatorMetrics: any,
   token_name: any,
-  token_address: any
+  token_address: any,
+  purchaseList: {
+    bribe: BigInt;
+    value: BigInt;
+    hash: string;
+    otmIndex: number;
+  }[],
+  sellList: { bribe: BigInt; value: BigInt; hash: string; otmIndex: number }[]
 ) {
   const factory = BuildMessageFactory();
   return factory.exec({
     gasApproveMetrics,
     gasTransactionsMetrics,
-    traceMetrics,
-    txSeparator,
     aggregatorMetrics,
     token_name,
     token_address,
+    purchaseList,
+    sellList,
   });
 }

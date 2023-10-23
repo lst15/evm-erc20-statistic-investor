@@ -10,15 +10,15 @@ class TxSeparatorUseCase {
   constructor(private web3Repository: Web3Interface) {}
 
   exec({ txOtm }: TxSeparatorUseCaseRequest) {
-    let group_index = -1;
-    const groups: any = [];
+    let group_index = 0;
+    const groups: any = [[]];
 
     txOtm.forEach((transaction: EventLog & { operation: string }) => {
       if (transaction.operation == "buy") {
-        group_index = group_index += 1;
-        groups.push([]);
+        //group_index = group_index += 1;
+        //groups.push([]);
       }
-      groups[group_index].push(transaction);
+      groups[0].push(transaction);
     });
 
     return groups;
