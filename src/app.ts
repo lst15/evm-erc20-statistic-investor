@@ -62,10 +62,6 @@ export async function profit(user_addresses: string[], token_address: string) {
     sellMetric
   );
 
-  txOtm.forEach((element) => {
-    console.log(element.transactionHash);
-  });
-
   return message;
 }
 
