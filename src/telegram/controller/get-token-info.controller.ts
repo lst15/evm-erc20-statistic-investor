@@ -1,5 +1,5 @@
-import { GetTokenInfoFactory } from "../factory/get-token-info.factory";
-import { BuildContractsModel } from "../model/main-contracts.model";
+import { GetTokenInfoFactory } from "../../factory/get-token-info.factory";
+import { BuildContractsModel } from "../../model/main-contracts.model";
 
 const GetTokenInfoController = (
   build_contracts: BuildContractsModel,

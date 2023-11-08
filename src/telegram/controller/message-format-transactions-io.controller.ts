@@ -1,7 +1,5 @@
-import { MessageFormatTxSplitterFactory } from "../factory/message-format-transactions-io.factory";
-import { TxTracerModel } from "../model/internal-transactios.model";
-import { GetTokenInfoModel } from "../model/token-info.model";
-import { TransactionIOModel } from "../model/transactions-io.model";
+import { MessageFormatTxSplitterFactory } from "../../factory/message-format-transactions-io.factory";
+import { GetTokenInfoModel } from "../../model/token-info.model";
 
 const MessageFormatTxSplitterController = (
   getTokenInfo: GetTokenInfoModel,

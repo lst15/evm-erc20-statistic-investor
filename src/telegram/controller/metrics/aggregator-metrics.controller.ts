@@ -1,4 +1,4 @@
-import { AggregatorMetricsFactory } from "../../factory/metrics/aggregator-metrics.factory";
+import { AggregatorMetricsFactory } from "../../../factory/metrics/aggregator-metrics.factory";
 
 export function AggregatorMetricsController(
   gasApproveMetrics: any,

@@ -1,4 +1,4 @@
-import { BuildMessageFactory } from "../../factory/organizers/build-message.factory";
+import { BuildMessageFactory } from "../../../factory/organizers/build-message.factory";
 
 export function BuildMessageController(
   gasApproveMetrics: any,

@@ -1,5 +1,5 @@
 import { EventLog } from "ethers";
-import { TxDebugTraceFactory } from "../../factory/readers/tx-debug-trace.factory";
+import { TxDebugTraceFactory } from "../../../factory/readers/tx-debug-trace.factory";
 
 const TxDebugTraceController = (
   txOtm: (EventLog & {
