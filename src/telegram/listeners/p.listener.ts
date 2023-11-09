@@ -15,7 +15,7 @@ export function pListener(telegram_bot: telebot) {
 
     const loading_message = await telegram_bot.sendMessage(
       msg.from.id,
-      "Loading ..." as any,
+      "Loading ... " as any,
       { replyToMessage: msg.message_id }
     );
     console.log(`[requesting] ${token_address}`);
