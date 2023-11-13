@@ -1,7 +1,7 @@
 import telebot from "telebot";
-import { wallets } from "../../env-schema";
 import { GetWalletsProfitAction } from "../actions/get-wallets-profit.action";
 import { pDto } from "../dto/p.dto";
+import { wallets } from "../../lib/loader-wallets";
 
 export function pListener(telegram_bot: telebot) {
   telegram_bot.on(/^\/p (.+)$/, async (msg, props) => {

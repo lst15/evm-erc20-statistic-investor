@@ -1,6 +1,6 @@
 import telebot from "telebot";
-import { removeWallet, wallets } from "../../env-schema";
 import { addwalletDto } from "../dto/addwallet.dto";
+import { removeLineFromFile } from "../../utils/remove-line-file.util";
 
 export function rmWalletListener(telegram_bot: telebot) {
   telegram_bot.on(/^\/rmwallet (.+)$/, async (msg, props) => {
@@ -10,7 +10,7 @@ export function rmWalletListener(telegram_bot: telebot) {
     if (user_address instanceof Error) {
       message = user_address.message;
     } else {
-      removeWallet(user_address);
+      removeLineFromFile("wallets.txt", user_address);
       message = "Wallet removed with success";
     }
 

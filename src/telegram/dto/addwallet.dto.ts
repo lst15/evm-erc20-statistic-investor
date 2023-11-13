@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { wallets } from "../../env-schema";
+import { wallets } from "../../lib/loader-wallets";
 
 export function addwalletDto(props: any) {
   const args = props.match[1];

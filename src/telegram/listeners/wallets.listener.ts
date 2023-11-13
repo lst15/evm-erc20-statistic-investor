@@ -1,5 +1,5 @@
 import telebot from "telebot";
-import { wallets } from "../../env-schema";
+import { wallets } from "../../lib/loader-wallets";
 
 export function walletsListener(telegram_bot: telebot) {
   telegram_bot.on("/wallets", async (msg, props) => {

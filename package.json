@@ -14,7 +14,7 @@
     "axios": "^1.5.0"
   },
   "scripts": {
-    "dev": "tsx watch ./src/app.ts",
+    "dev": "tsx watch ./src/server.ts",
     "start": "tsx watch ./src/server.ts"
   }
 }
