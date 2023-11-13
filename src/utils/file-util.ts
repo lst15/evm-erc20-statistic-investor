@@ -9,3 +9,7 @@ export function appendWalletInFileUtil(wallet: String) {
     }
   );
 }
+
+export function removeFileContentUtil() {
+  fs.writeFile("wallets.txt", "", function () {});
+}

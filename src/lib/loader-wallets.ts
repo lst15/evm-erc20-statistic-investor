@@ -5,4 +5,8 @@ export async function loadWallets() {
   wallets = (await readFileUtil("wallets.txt")).split("\n") as string[];
 }
 
+export function clearWallets() {
+  wallets = [];
+}
+
 loadWallets();

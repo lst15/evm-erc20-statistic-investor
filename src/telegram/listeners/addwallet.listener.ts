@@ -1,6 +1,6 @@
 import telebot from "telebot";
 import { addwalletDto } from "../dto/addwallet.dto";
-import { appendWalletInFileUtil } from "../../utils/append-file-util";
+import { appendWalletInFileUtil } from "../../utils/file-util";
 import { wallets } from "../../lib/loader-wallets";
 
 export function addWalletListener(telegram_bot: telebot) {
