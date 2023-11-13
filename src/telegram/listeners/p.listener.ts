@@ -13,6 +13,16 @@ export function pListener(telegram_bot: telebot) {
       });
     }
 
+    if (wallets.length == 0) {
+      return await telegram_bot.sendMessage(
+        msg.from.id,
+        "You need to set at least 1 wallet address" as any,
+        {
+          replyToMessage: msg.message_id,
+        }
+      );
+    }
+
     const loading_message = await telegram_bot.sendMessage(
       msg.from.id,
       "Loading ... " as any,
