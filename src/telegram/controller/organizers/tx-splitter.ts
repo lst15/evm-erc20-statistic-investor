@@ -1,5 +1,5 @@
-import { TxSplitterFactory } from "../../factory/organizers/tx-splitter.factory";
-import { BuildContractsModel } from "../../model/main-contracts.model";
+import { TxSplitterFactory } from "../../../factory/organizers/tx-splitter.factory";
+import { BuildContractsModel } from "../../../model/main-contracts.model";
 
 const TxSplitterController = async (
   build_contracts: BuildContractsModel,

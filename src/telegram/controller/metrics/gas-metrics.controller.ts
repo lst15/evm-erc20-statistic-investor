@@ -1,5 +1,5 @@
 import { EventLog } from "ethers";
-import { gasMetricsFactory } from "../../factory/metrics/gas-metrics.factory";
+import { gasMetricsFactory } from "../../../factory/metrics/gas-metrics.factory";
 
 export const gasMetricsController = async (
   txOtm: (EventLog & {

@@ -1,5 +1,5 @@
-import { FormatTxSplitterFactory } from "../factory/format-transactions-io.factory";
-import { TransactionIOModel } from "../model/transactions-io.model";
+import { FormatTxSplitterFactory } from "../../factory/format-transactions-io.factory";
+import { TransactionIOModel } from "../../model/transactions-io.model";
 
 const FormatTxSplitterController = (
   cost_group: any,

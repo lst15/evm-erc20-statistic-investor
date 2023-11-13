@@ -1,6 +1,6 @@
 import { EventLog } from "ethers";
-import { SellMetricFactory } from "../../factory/metrics/sell-metric.factory";
-import { TxDebugTraceModel } from "../../model/tx-debug-trace.model";
+import { SellMetricFactory } from "../../../factory/metrics/sell-metric.factory";
+import { TxDebugTraceModel } from "../../../model/tx-debug-trace.model";
 
 export const SellMetricController = (
   txDebugTrace: TxDebugTraceModel[],

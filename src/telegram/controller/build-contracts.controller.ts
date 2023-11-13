@@ -1,4 +1,4 @@
-import { BuildContractsFactory } from "../factory/build-factory.factory";
+import { BuildContractsFactory } from "../../factory/build-factory.factory";
 
 const BuildContractsController = (token_address: string) => {
   const factory = BuildContractsFactory();
