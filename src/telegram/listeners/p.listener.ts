@@ -44,6 +44,16 @@ export function pListener(telegram_bot: telebot) {
       );
     }
 
+    if (message instanceof Error) {
+      return telegram_bot.editMessageText(
+        {
+          chatId: loading_message.chat.id,
+          messageId: loading_message.message_id,
+        },
+        message.message
+      );
+    }
+
     return await telegram_bot.sendMessage(msg.from.id, message as any, {
       replyToMessage: msg.message_id,
       parseMode: "markdown",

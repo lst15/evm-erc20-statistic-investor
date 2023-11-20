@@ -39,6 +39,10 @@ export async function GetWalletsProfitAction(
 
   const txDebugTrace = await TxDebugTraceController(txOtm);
 
+  if (txDebugTrace instanceof Error) {
+    return txDebugTrace;
+  }
+
   const purchaseMetric = PurchaseMetricController(
     txDebugTrace,
     user_addresses,

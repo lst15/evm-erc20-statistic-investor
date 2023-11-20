@@ -17,10 +17,15 @@ class TxDebugTraceUseCase {
 
     for (var eventIndex in txOtm) {
       const eventLog = txOtm[eventIndex];
-      const debugTrace = await this.requestRepository.debugTraceTransaction(
-        eventLog.transactionHash
-      );
-      debugTraceList.push(debugTrace);
+
+      try {
+        const debugTrace = await this.requestRepository.debugTraceTransaction(
+          eventLog.transactionHash
+        );
+        debugTraceList.push(debugTrace);
+      } catch (error: any) {
+        return error;
+      }
     }
 
     return debugTraceList;

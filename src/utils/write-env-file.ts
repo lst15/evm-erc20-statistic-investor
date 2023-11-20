@@ -6,7 +6,7 @@ export const writeEnvToFile = (
   envVariables: { key: string; value: any }[]
 ): void => {
   // get `.env` from path of current directory
-  const path = resolve(__dirname, "../.env");
+  const path = resolve(__dirname, "../../.env");
   readFile(path, "utf8", (err: any, data: any) => {
     if (err) {
       console.error(err);
